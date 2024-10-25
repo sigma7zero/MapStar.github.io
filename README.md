@@ -1,2 +1,2 @@
-# MetaVerse.MapStar.github.io
+# MapStar.github.io
 Web-based level map editor
