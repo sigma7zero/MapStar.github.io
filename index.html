@@ -88,16 +88,16 @@
 	    	shadowGenerator.usePoissonSampling = true;
 	    	ground.receiveShadows = true;
 	
-	/*		
-	    // GUI
-	    let advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("GUI", true, scene);
-	    let loadedGUI = await advancedTexture.parseFromSnippetAsync("G5EQWI#293");
-	
+			
+		// Set up the GUI
+		let advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("GUI", true, scene);
+		let loadedGUI = await advancedTexture.parseFromSnippetAsync("G5EQWI#293");
+	/*
 	    // Resources 
 	    // Environment Map Library
 	    let environmentLibrary = advancedTexture.getControlByName("EnvironmentLibrary");
 	    var numberOfUrls = environmentLibrary.text.toString().split(" ").length;
-	    console.log("Environment Library contains: " + numberOfUrls.toString() + " Urls");
+	    //console.log("Environment Library contains: " + numberOfUrls.toString() + " Urls");
 	
 	    let addURLToLibraryButton = advancedTexture.getControlByName("addURLToLibraryButton");
 	    let addURLButtonLight = advancedTexture.getControlByName("addURLButtonLight");
