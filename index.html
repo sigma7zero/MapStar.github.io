@@ -21,6 +21,7 @@
         </style>
 
         <script src="https://cdn.babylonjs.com/babylon.js"></script>
+	<script src="https://cdn.babylonjs.com/gui/babylon.gui.js"></script>    
 
     </head>
 
@@ -28,12 +29,12 @@
 
 	<canvas id="renderCanvas"></canvas>
 
-	<script>
+	<script type="module">
         const canvas = document.getElementById("renderCanvas"); // Get the canvas element
        
 	const engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
 		
-	const createScene = function () {
+	const createScene = async function () {
 
 	 	// This creates a basic Babylon Scene object (non-mesh)
 	    	var scene = new BABYLON.Scene(engine);
@@ -90,9 +91,13 @@
 	
 			
 		// Set up the GUI
-		//let advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("GUI", true, scene);
-		//let loadedGUI = await advancedTexture.parseFromSnippetAsync("G5EQWI#293");
-	/*
+		let advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("GUI", true, scene);
+		let loadedGUI = await advancedTexture.parseFromSnippetAsync("G5EQWI#293");
+
+
+
+
+		
 	    // Resources 
 	    // Environment Map Library
 	    let environmentLibrary = advancedTexture.getControlByName("EnvironmentLibrary");
@@ -470,7 +475,7 @@
 	    donateButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("illuminateDonateButton").isVisible = true });
 	    donateButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("illuminateDonateButton").isVisible = false });
 	
-	    */
+	    
 		return scene;
         };
        
