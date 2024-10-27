@@ -33,10 +33,11 @@ html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" 
 
     const engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
 
+    const scene = new BABYLON.Scene(engine);
+    
     const createScene = async function () {
-
-      // This creates a basic Babylon Scene object (non-mesh)
-      var scene = new BABYLON.Scene(engine);
+ 
+      //var scene = new BABYLON.Scene(engine);
 
       // Sky sphere
       var skySphere = BABYLON.MeshBuilder.CreateSphere("sphere", { diameter: 1024, segments: 32 }, scene);
@@ -472,7 +473,7 @@ html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" 
       return scene;
     };
 
-    const scene = await createScene(); //Call the createScene function
+    scene = await createScene(); //Call the createScene function
     // Register a render loop to repeatedly render the scene
     engine.runRenderLoop(function () {
       scene.render();
