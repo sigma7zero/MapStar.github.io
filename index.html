@@ -31,14 +31,12 @@ html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" 
   <script type="module">
     const canvas = document.getElementById("renderCanvas"); // Get the canvas element
 
-    const engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
-
-    const scene = new BABYLON.Scene(engine);
+    const engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine   
     
-    const createScene = async function () {
- 
-      //var scene = new BABYLON.Scene(engine);
-
+    const createScene = async function () {       
+      
+      const scene = new BABYLON.Scene(engine);      
+      
       // Sky sphere
       var skySphere = BABYLON.MeshBuilder.CreateSphere("sphere", { diameter: 1024, segments: 32 }, scene);
       skySphere.flipFaces(true);
@@ -473,7 +471,7 @@ html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" 
       return scene;
     };
 
-    scene = await createScene(); //Call the createScene function
+    const scene = await createScene(); //Call the createScene function
     // Register a render loop to repeatedly render the scene
     engine.runRenderLoop(function () {
       scene.render();
