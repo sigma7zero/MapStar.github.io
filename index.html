@@ -94,7 +94,8 @@
 
       // Set up the GUI
       let advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("GUI", true, scene);
-      let loadedGUI = await advancedTexture.parseFromSnippetAsync("G5EQWI#293");
+      //let loadedGUI = await advancedTexture.parseFromSnippetAsync("G5EQWI#293");
+      let loadedGUI = await advancedTexture.parseFromURLAsync("https://raw.githubusercontent.com/sigma7zero/MapStar.github.io/main/guiTexture.json");
       // Resources 
       // Environment Map Library
       let environmentLibrary = advancedTexture.getControlByName("EnvironmentLibrary");
