@@ -390,18 +390,18 @@
       });
 
 
-      sm_resetButtonLight.isVisible = true;
+      //sm_resetButtonLight.isVisible = true;
 
       sm_resetButton.onPointerUpObservable.add(function () {
         if (!createPanel.isVisible) {
           createPanel.isVisible = true;
-          //sm_resetButtonLight.isVisible = false;
+          sm_resetButtonLight.isVisible = true;
           createButtonLight.isVisible = true;
         }
         else {
           createPanel.isVisible = false;
-          //sm_resetButtonLight.isVisible = false;
-          //createButtonLight.isVisible = false;
+          sm_resetButtonLight.isVisible = false;
+          createButtonLight.isVisible = false;
         }
       });
 
@@ -410,7 +410,7 @@
       });
 
       sm_resetButton.onPointerOutObservable.add(function () {
-        //sm_resetButtonLight.isVisible = false;
+        sm_resetButtonLight.isVisible = false;
       });
 
       let assetsButton = advancedTexture.getControlByName("assetsButton");
@@ -479,6 +479,10 @@
     const scene = await createScene(); //Call the createScene function
     // Register a render loop to repeatedly render the scene
     engine.runRenderLoop(function () {
+      
+      createButtonLight.isVisible = createPanel.isVisible;
+      sm_resetButtonLight.isVisible = createButtonLight.isVisible;      
+      
       scene.render();
     });
 
