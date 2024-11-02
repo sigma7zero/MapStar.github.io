@@ -478,10 +478,7 @@
 
     const scene = await createScene(); //Call the createScene function
     // Register a render loop to repeatedly render the scene
-    engine.runRenderLoop(function () {
-      
-      createButtonLight.isVisible = createPanel.isVisible;
-      sm_resetButtonLight.isVisible = createButtonLight.isVisible;      
+    engine.runRenderLoop(function () { 
       
       scene.render();
     });
