@@ -59,11 +59,12 @@
                         });
                     }
 
-                    var engine = null;
-        var scene = null;
-        var sceneToRender = null;
-        var createDefaultEngine = function() { return new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true,  disableWebGL2Support: false}); };
-        var createScene = async function () {
+            
+    var engine = null;
+    var scene = null;
+    var sceneToRender = null;
+    var createDefaultEngine = function() { return new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true,  disableWebGL2Support: false}); };
+    var createScene = async function () {
     // This creates a basic Babylon Scene object (non-mesh)
     var scene = new BABYLON.Scene(engine);
      scene.clearColor = new BABYLON.Color3(0, 0, 0).toLinearSpace();
@@ -84,7 +85,6 @@
     skyMaterial.backFaceCulling = false;
     skySphere.material = skyMaterial;
 
-
     // Cameras  
     // 1  
     var gameCamera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(0, 2, -10), scene);
@@ -93,7 +93,6 @@
     // 2
     var arcRotateCamera = new BABYLON.ArcRotateCamera("ArcRotateCamera", 0, 0, 10, new BABYLON.Vector3(0, 0, 0), scene);
     arcRotateCamera.setPosition(new BABYLON.Vector3(0, 2, -10));
-
 
     // Create a light source
     var light = new BABYLON.DirectionalLight("DirectLight1", new BABYLON.Vector3(1, -2, 1), scene);
@@ -161,8 +160,7 @@
     deleteURLFromLibraryButton.onPointerEnterObservable.add(function () { deleteURLButtonLight.isVisible = true });
     deleteURLFromLibraryButton.onPointerOutObservable.add(function () { deleteURLButtonLight.isVisible = false });
     
-    let newProjectWindow = advancedTexture.getControlByName("NewWindow");
-    
+    let newProjectWindow = advancedTexture.getControlByName("NewWindow");    
     newProjectWindow.isVisible = false;
     
     let newButton = advancedTexture.getControlByName("ButtonNew");
@@ -212,10 +210,9 @@
     
     // Create windows 
     let envWindow = advancedTexture.getControlByName("envWindow");
-    let openProjectWindow = advancedTexture.getControlByName("OpenWindow");
     
-    
-    openProjectWindow.isVisible = false;
+    let openProjectWindow = advancedTexture.getControlByName("OpenWindow");    
+    openProjectWindow.isVisible = true;
         
     envWindow.isVisible = false;
     
