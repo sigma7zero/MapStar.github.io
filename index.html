@@ -185,12 +185,32 @@
     newButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("illuminateNewButton").isVisible = false });
  
     let openButton = advancedTexture.getControlByName("ButtonOpen");
-    openButton.onPointerUpObservable.add(function () { alert("ButtonOpen Pressed!...."); });
+    openButton.onPointerUpObservable.add(function () { 
+         if (!openProjectWindow.isVisible) {
+            openProjectWindow.isVisible = true;
+            advancedTexture.getControlByName("illuminateOpenButton").isVisible = true
+        }
+        else {
+            openProjectWindow.isVisible = false;
+            advancedTexture.getControlByName("illuminateOpenButton").isVisible = false
+        }        
+    });
+        
     openButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("illuminateOpenButton").isVisible = true });
     openButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("illuminateOpenButton").isVisible = false });
 
     let saveButton = advancedTexture.getControlByName("ButtonSave");
-    saveButton.onPointerUpObservable.add(function () { alert("ButtonSave Pressed!...."); });
+    saveButton.onPointerUpObservable.add(function () { 
+        if (!saveProjectWindow.isVisible) {
+            saveProjectWindow.isVisible = true;
+            advancedTexture.getControlByName("illuminateSaveButton").isVisible = true
+        }
+        else {
+            saveProjectWindow.isVisible = false;
+            advancedTexture.getControlByName("illuminateSaveButton").isVisible = false
+        }                
+    });
+        
     saveButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("illuminateSaveButton").isVisible = true });
     saveButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("illuminateSaveButton").isVisible = false });
 
