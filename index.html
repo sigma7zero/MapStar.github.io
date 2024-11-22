@@ -162,7 +162,13 @@
     
     let newProjectWindow = advancedTexture.getControlByName("NewWindow");    
     newProjectWindow.isVisible = false;
-    
+        
+    let saveProjectWindow = advancedTexture.getControlByName("SaveWindow");
+    saveProjectWindow.isVisible = false;
+
+    let openProjectWindow = advancedTexture.getControlByName("OpenWindow");    
+    openProjectWindow.isVisible = true;
+        
     let newButton = advancedTexture.getControlByName("ButtonNew");
     newButton.onPointerUpObservable.add(function () { 
         if (!newProjectWindow.isVisible) {
@@ -175,21 +181,9 @@
         }
         });
 
-
-
-
-
-
-
-
-
-
-
-
-
     newButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("illuminateNewButton").isVisible = true });
     newButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("illuminateNewButton").isVisible = false });
-
+ 
     let openButton = advancedTexture.getControlByName("ButtonOpen");
     openButton.onPointerUpObservable.add(function () { alert("ButtonOpen Pressed!...."); });
     openButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("illuminateOpenButton").isVisible = true });
@@ -208,14 +202,9 @@
     let envButton = advancedTexture.getControlByName("envButton");
     let envButtonLight = advancedTexture.getControlByName("envButtonLight");
     
-    // Create windows 
-    let envWindow = advancedTexture.getControlByName("envWindow");
-    
-    let openProjectWindow = advancedTexture.getControlByName("OpenWindow");    
-    openProjectWindow.isVisible = true;
-        
+    let envWindow = advancedTexture.getControlByName("envWindow");        
     envWindow.isVisible = false;
-    
+        
     envButtonLight.isVisible = envWindow.isVisible;
     envButton.onPointerUpObservable.add(function () {
         if (!envWindow.isVisible) {
