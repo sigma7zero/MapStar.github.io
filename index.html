@@ -459,17 +459,23 @@
     // Setup small reset button in sync with the main Create Panel
     let sm_resetButton = advancedTexture.getControlByName("sm_resetButton");
     let sm_resetButtonLight = advancedTexture.getControlByName("sm_resetButtonLight");
-
+    let sm_resetCloseIcon = advancedTexture.getControlByName("Image_Close");
+    let sm_resetOpenIcon = advancedTexture.getControlByName("Image_Open");
+        
     createButtonLight.isVisible = createPanel.isVisible;   
 
     createButton.onPointerUpObservable.add(function () {
         if (!createPanel.isVisible) {
             createPanel.isVisible = true;
+            sm_resetCloseIcon.isVisible = true;
+            sm_resetOpenIcon.isVisible = false;
             createButtonLight.isVisible = true;
             sm_resetButtonLight.isVisible = true;
         }
         else {
             createPanel.isVisible = false;
+            sm_resetCloseIcon.isVisible = false;
+            sm_resetOpenIcon.isVisible = true;
             createButtonLight.isVisible = false;
             sm_resetButtonLight.isVisible = false;
         }
