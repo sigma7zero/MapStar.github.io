@@ -119,8 +119,10 @@
 
     // GUI
     let advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("GUI", true, scene);    
-    let loadedGUI = await advancedTexture.parseFromSnippetAsync("19H56T#9");
-
+    //let loadedGUI = await advancedTexture.parseFromSnippetAsync("19H56T#9");
+        
+    let loadedGUI = await advancedTexture.parseFromURLAsync("https://raw.githubusercontent.com/sigma7zero/MapStar.github.io/main/guiTexture.json");
+      
     // HELPERS
     const urlText = 'https://corsproxy.io/?' + encodeURIComponent('https://raw.githubusercontent.com/sigma7zero/MapStar/main/fileManifest.txt');
 
