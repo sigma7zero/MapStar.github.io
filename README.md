@@ -1,3 +1,7 @@
-# MapStar.github.io
-Web-based level map editor
-![map_star](https://github.com/user-attachments/assets/3537ae26-29ff-42ca-8954-52711ddf9e8c)
+# MapStar
+Welcome! This is the home repository for the MapStar app. 
+A simple-to-use, web-centric,  level map editor.
+Cross-platform and tablet-enabled.
+
+
+![mapstar_screen](https://github.com/user-attachments/assets/a5d89384-6c9f-4397-964c-653be7885573)
