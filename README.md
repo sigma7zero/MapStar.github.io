@@ -1,8 +1,9 @@
 # MapStar
 Welcome! 
-This is the home repository for the MapStar app. 
+\nThis is the home repository for the MapStar app. 
 A simple-to-use, web-centric,  level map editor.
 Cross-platform and tablet-enabled.
+Version: alpha 0.1.0
 
 https://sigma7zero.github.io/MapStar.github.io/
 
