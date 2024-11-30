@@ -424,6 +424,8 @@
     let smFullScreenButtonMinIcon = advancedTexture.getControlByName("ImageMinScreen");
         
     smFullScreenButtonLight.isVisible = false;
+    smFullScreenButtonMaxIcon.isVisible = fullScreenToggle;
+    smFullScreenButtonMinIcon.isVisible = !fullScreenToggle;    
 
     smFullscreenButton.onPointerUpObservable.add(function () {
         
