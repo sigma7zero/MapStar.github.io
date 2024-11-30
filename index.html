@@ -429,14 +429,14 @@
         
         if (!fullScreenToggle) {
             canvasParent.requestFullscreen();
-            smFullScreenButtonMaxIcon.isVisible = true;
-            smFullScreenButtonMinIcon.isVisible = false;
+            smFullScreenButtonMaxIcon.isVisible = false;
+            smFullScreenButtonMinIcon.isVisible = true;
             fullScreenToggle = true;
         }
         else{
             document.exitFullscreen();
-            smFullScreenButtonMaxIcon.isVisible = false;
-            smFullScreenButtonMinIcon.isVisible = true;
+            smFullScreenButtonMaxIcon.isVisible = true;
+            smFullScreenButtonMinIcon.isVisible = false;
             fullScreenToggle = false;
         }       
     });
