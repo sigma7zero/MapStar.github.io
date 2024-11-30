@@ -420,16 +420,23 @@
     let fullScreenToggle = false;
     let smFullscreenButton = advancedTexture.getControlByName("smFullscreenButton");
     let smFullScreenButtonLight = advancedTexture.getControlByName("smFullScreenButtonLight");
+    let smFullScreenButtonMaxIcon = advancedTexture.getControlByName("ImageMaxScreen");
+    let smFullScreenButtonMinIcon = advancedTexture.getControlByName("ImageMinScreen");
+        
     smFullScreenButtonLight.isVisible = false;
 
     smFullscreenButton.onPointerUpObservable.add(function () {
         
         if (!fullScreenToggle) {
             canvasParent.requestFullscreen();
+            smFullScreenButtonMaxIcon.isVisible = true;
+            smFullScreenButtonMinIcon.isVisible = false;
             fullScreenToggle = true;
         }
         else{
             document.exitFullscreen();
+            smFullScreenButtonMaxIcon.isVisible = false;
+            smFullScreenButtonMinIcon.isVisible = true;
             fullScreenToggle = false;
         }       
     });
