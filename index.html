@@ -379,7 +379,8 @@
     let sm_cameraButtonLight = advancedTexture.getControlByName("sm_cameraButtonLight");
     let sm_cameraButton_cameraImage = advancedTexture.getControlByName("ImageCamera");
     let sm_cameraButton_gamePadImage = advancedTexture.getControlByName("ImageGamePad");
-
+    let textblockCamType = advancedTexture.getControlByName("TextblockCamType");
+    textblockCamType.text = "First Person Camera";
     sm_cameraButtonLight.isVisible = false;
 
     sm_cameraButton.onPointerUpObservable.add(function () {         
@@ -388,6 +389,7 @@
             camToggle = true;   
             sm_cameraButton_cameraImage.isVisible = true;
             sm_cameraButton_gamePadImage.isVisible = false;
+            textblockCamType.text = "Arc Rotate Camera";
 
             scene.activeCamera.detachControl(canvas);
             scene.activeCamera = arcRotateCamera;
@@ -398,6 +400,7 @@
             camToggle = false;
             sm_cameraButton_cameraImage.isVisible = false;
             sm_cameraButton_gamePadImage.isVisible = true;
+            textblockCamType.text = "First Person Camera";
             scene.activeCamera.detachControl(canvas);
             scene.activeCamera = gameCamera;
             scene.activeCamera.attachControl(canvas, true);
@@ -631,7 +634,7 @@
 
     // Calculate FPS 
     var textblockFPS = advancedTexture.getControlByName("TextblockFPS");
-    
+        
     scene.registerAfterRender(() => {
         textblockFPS.text = "FPS: " + Math.round(scene.getEngine().getFps());
     });
