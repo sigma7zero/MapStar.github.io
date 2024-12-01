@@ -504,11 +504,14 @@
     let sm_resetCloseIcon = advancedTexture.getControlByName("Image_Close");
     let sm_resetOpenIcon = advancedTexture.getControlByName("Image_Open");
 
+    let toggleCreatePanel = true;    
+        
     createButtonLight.isVisible = createPanel.isVisible;   
 
     createButton.onPointerUpObservable.add(function () {
         if (!createPanel.isVisible) {
             createPanel.isVisible = true;
+            toggleCreatePanel = true;
             createButtonLight.isVisible = true;
             sm_resetCloseIcon.isVisible = true;
             sm_resetOpenIcon.isVisible = false;
@@ -516,6 +519,7 @@
         }
         else {
             createPanel.isVisible = false;
+            toggleCreatePanel = false;
             createButtonLight.isVisible = false;
             sm_resetCloseIcon.isVisible = false;
             sm_resetOpenIcon.isVisible = true;
@@ -535,16 +539,17 @@
         }
     });
 
-
-
     sm_resetButton.onPointerUpObservable.add(function () {
-        if (!createPanel.isVisible) {
-            createPanel.isVisible = true;
-            sm_resetButtonLight.isVisible = true;
-            createButtonLight.isVisible = true;
-        }
+        //if (!createPanel.isVisible) {
+            if (!toggleCreatePanel) {
+                createPanel.isVisible = true;
+                toggleCreatePanel = true;
+                sm_resetButtonLight.isVisible = true;
+                createButtonLight.isVisible = true;
+            }
         else {
             createPanel.isVisible = false;
+            toggleCreatePanel = false;
             sm_resetButtonLight.isVisible = false;
             createButtonLight.isVisible = false;
         }
