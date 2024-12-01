@@ -65,10 +65,9 @@
     var scene = null;
     var sceneToRender = null;
     var createDefaultEngine = function() { return new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true,  disableWebGL2Support: false}); };
-    var createScene = async function () {
-    // This creates a basic Babylon Scene object (non-mesh)
+    var createScene = async function () {    
     var scene = new BABYLON.Scene(engine);
-     scene.clearColor = new BABYLON.Color3(0, 0, 0).toLinearSpace();
+    scene.clearColor = new BABYLON.Color3(0, 0, 0).toLinearSpace();
    
 
     // Sky sphere
@@ -171,7 +170,7 @@
     saveProjectWindow.isVisible = false;
 
     let openProjectWindow = advancedTexture.getControlByName("OpenWindow");    
-    openProjectWindow.isVisible = true;
+    openProjectWindow.isVisible = false;
         
     let newButton = advancedTexture.getControlByName("ButtonNew");
     newButton.onPointerUpObservable.add(function () { 
