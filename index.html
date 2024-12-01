@@ -56,20 +56,20 @@
                         engine.runRenderLoop(function () {
                             if (sceneToRender && sceneToRender.activeCamera) {
                                 sceneToRender.render();
+                                engineFPS = engine.getFps().toFixed();
                             }
                         });
                     }
 
             
     var engine = null;
-    var scene = null;
+    var scene = null;    
     var sceneToRender = null;
     var createDefaultEngine = function() { return new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true,  disableWebGL2Support: false}); };
     var createScene = async function () {    
     var scene = new BABYLON.Scene(engine);
     scene.clearColor = new BABYLON.Color3(0, 0, 0).toLinearSpace();
    
-
     // Sky sphere
     var skySphere = BABYLON.MeshBuilder.CreateSphere("sphere", { diameter: 1024, segments: 32 }, scene);
     skySphere.flipFaces(true);
@@ -124,15 +124,9 @@
             
     let loadedGUI = await advancedTexture.parseFromURLAsync("https://raw.githubusercontent.com/sigma7zero/MapStar.github.io/main/guiTexture.json");
       
-    // HELPERS   
-   /*
-    // DOESN'T WORK
-    let sceneInstrumentation = new SceneInstumentation(scene);
-    let FPS = 1000.0 / sceneInstrumentation.captureFrameTime = true;
-    let textblockFPS =  advancedTexture.getControlByName("TextblockFPS");
-    textblockFPS.text = "FPS: " + FPS;
-    */
-        
+    // HELPERS         
+    
+
     const urlText = 'https://corsproxy.io/?' + encodeURIComponent('https://raw.githubusercontent.com/sigma7zero/MapStar/main/fileManifest.txt');
 
     function getText(url){
@@ -457,11 +451,6 @@
         smFullScreenButtonLight.isVisible = false;
     });
 
-
-
-
-
-
     let terrainButton = advancedTexture.getControlByName("ButtonTerrain");
     terrainButton.onPointerUpObservable.add(function () { alert("ButtonTerrain Pressed!...."); });
     terrainButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("illuminateTerrainButton").isVisible = true });
@@ -640,9 +629,18 @@
     donateButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("illuminateDonateButton").isVisible = true });
     donateButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("illuminateDonateButton").isVisible = false });
 
+    // Calculate FPS 
+    var textblockFPS = advancedTexture.getControlByName("TextblockFPS");
+    
+    scene.registerAfterRender(() => {
+        textblockFPS.text = "FPS: " + Math.round(scene.getEngine().getFps());
+    });
+    
     return scene;
 };
-    window.initFunction = async function() {                    
+    
+
+window.initFunction = async function() {                    
                     
     var asyncEngineCreation = async function() {
         try { return createDefaultEngine();} 
@@ -656,7 +654,9 @@
         if (!engine) throw 'engine should not be null.';
            
         startRenderLoop(engine, canvas);
-        window.scene = createScene();};        
+        window.scene = createScene();
+    };        
+            
         initFunction().then(() => {scene.then(returnedScene => { sceneToRender = returnedScene; });
         
     });
