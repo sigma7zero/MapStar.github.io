@@ -540,18 +540,21 @@
     });
 
     sm_resetButton.onPointerUpObservable.add(function () {
-        //if (!createPanel.isVisible) {
-            if (!toggleCreatePanel) {
-                createPanel.isVisible = true;
-                toggleCreatePanel = true;
-                sm_resetButtonLight.isVisible = true;
-                createButtonLight.isVisible = true;
-            }
+        if (!toggleCreatePanel) {
+            createPanel.isVisible = true;
+            toggleCreatePanel = true;
+            sm_resetButtonLight.isVisible = true;
+            createButtonLight.isVisible = true;
+            sm_resetCloseIcon.isVisible = true;
+            sm_resetOpenIcon.isVisible = false;
+        }
         else {
             createPanel.isVisible = false;
             toggleCreatePanel = false;
             sm_resetButtonLight.isVisible = false;
             createButtonLight.isVisible = false;
+            sm_resetCloseIcon.isVisible = false;
+            sm_resetOpenIcon.isVisible = true;
         }
     });
 
