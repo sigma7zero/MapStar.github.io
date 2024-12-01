@@ -124,7 +124,13 @@
             
     let loadedGUI = await advancedTexture.parseFromURLAsync("https://raw.githubusercontent.com/sigma7zero/MapStar.github.io/main/guiTexture.json");
       
-    // HELPERS
+    // HELPERS   
+    let sceneInstrumentation = new SceneInstumentation(scene);
+    let FPS = 1000.0 / sceneInstrumentation.captureFrameTime = true;
+    let textblockFPS =  advancedTexture.getControlByName("TextblockFPS");
+    textblockFPS.text = "FPS: " + FPS;
+    
+        
     const urlText = 'https://corsproxy.io/?' + encodeURIComponent('https://raw.githubusercontent.com/sigma7zero/MapStar/main/fileManifest.txt');
 
     function getText(url){
