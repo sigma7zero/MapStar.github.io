@@ -116,16 +116,29 @@
     var shadowGenerator = new BABYLON.ShadowGenerator(1024, light);
     shadowGenerator.addShadowCaster(sphere);
     shadowGenerator.usePoissonSampling = true;
-    ground.receiveShadows = true;
-    
+    ground.receiveShadows = true;    
 
     // GUI
-    let advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("GUI", true, scene);    
-            
+    let advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("GUI", true, scene);              
     let loadedGUI = await advancedTexture.parseFromURLAsync("https://raw.githubusercontent.com/sigma7zero/MapStar.github.io/main/guiTexture.json");
       
-    // HELPERS         
+    // HELPERS  
+    var instrumentation = new BABYLON.SceneInstrumentation(scene);
     
+    var toggleStats = true;
+    
+    if (toggleStats){
+        instrumentation.captureFrameTime = true;
+        instrumentation.captureActiveMeshesEvaluationTime = true;
+        instrumentation.captureRenderTargetsRenderTime = true;
+        instrumentation.captureFrameTime = true;
+        instrumentation.captureRenderTime = true;
+        instrumentation.captureInterFrameTime = true;
+        instrumentation.captureParticlesRenderTime = true;
+        instrumentation.captureSpritesRenderTime = true;
+        instrumentation.capturePhysicsTime = true;
+        instrumentation.captureAnimationsTime = true;
+    }
 
     const urlText = 'https://corsproxy.io/?' + encodeURIComponent('https://raw.githubusercontent.com/sigma7zero/MapStar/main/fileManifest.txt');
 
@@ -632,11 +645,20 @@
     donateButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("illuminateDonateButton").isVisible = true });
     donateButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("illuminateDonateButton").isVisible = false });
 
-    // Calculate FPS 
+    // Get FPS and other stats
     var textblockFPS = advancedTexture.getControlByName("TextblockFPS");
+    var textblockDrawCalls = advancedTexture.getControlByName("TextblockDrawCalls");
+    var textblockFaces = advancedTexture.getControlByName("TextblockFaces");
+    var textblockVerts = advancedTexture.getControlByName("TextblockVerts");
+    var textblockMeshes = advancedTexture.getControlByName("TextblockMeshes");
+
         
     scene.registerAfterRender(() => {
-        textblockFPS.text = "FPS: " + Math.round(scene.getEngine().getFps());
+        textblockFPS.text = "FPS: " + Math.round(scene.getEngine().getFps());        
+        textblockDrawCalls.text = "Draw Calls: " + instrumentation.drawCallsCounter.current;
+        textblockFaces.text = "Triangles: " + scene.getActiveIndices() / 3;
+        textblockVerts.text = "Vertices: " + scene.getTotalVertices();
+        textblockMeshes.text = "Meshes: " + scene.getActiveMeshes().length;
     });
     
     return scene;
