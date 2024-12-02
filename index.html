@@ -68,6 +68,7 @@
     var createDefaultEngine = function() { return new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true,  disableWebGL2Support: false}); };
     var createScene = async function () {    
     var scene = new BABYLON.Scene(engine);
+
     scene.clearColor = new BABYLON.Color3(0, 0, 0).toLinearSpace();
    
     // Sky sphere
@@ -118,15 +119,16 @@
     shadowGenerator.usePoissonSampling = true;
     ground.receiveShadows = true;    
 
+    // LOADER
+    engine.displayLoadingUI();
+
     // GUI
     let advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("GUI", true, scene);              
     let loadedGUI = await advancedTexture.parseFromURLAsync("https://raw.githubusercontent.com/sigma7zero/MapStar.github.io/main/guiTexture.json");
-      
+       
     // HELPERS  
-    var instrumentation = new BABYLON.SceneInstrumentation(scene);
-    
-    var toggleStats = true;
-    
+    var instrumentation = new BABYLON.SceneInstrumentation(scene);    
+    var toggleStats = true;    
     if (toggleStats){
         instrumentation.captureFrameTime = true;
         instrumentation.captureActiveMeshesEvaluationTime = true;
@@ -139,7 +141,7 @@
         instrumentation.capturePhysicsTime = true;
         instrumentation.captureAnimationsTime = true;
     }
-
+    
     const urlText = 'https://corsproxy.io/?' + encodeURIComponent('https://raw.githubusercontent.com/sigma7zero/MapStar/main/fileManifest.txt');
 
     function getText(url){
@@ -580,8 +582,6 @@
     });
 
 
-
-
     let assetsButton = advancedTexture.getControlByName("assetsButton");
     let assetsButtonLight = advancedTexture.getControlByName("assetsButtonLight");
     let assetsPanel = advancedTexture.getControlByName("assetsPanel");
@@ -651,7 +651,6 @@
     var textblockFaces = advancedTexture.getControlByName("TextblockFaces");
     var textblockVerts = advancedTexture.getControlByName("TextblockVerts");
     var textblockMeshes = advancedTexture.getControlByName("TextblockMeshes");
-
         
     scene.registerAfterRender(() => {
         textblockFPS.text = "FPS: " + Math.round(scene.getEngine().getFps());        
@@ -660,6 +659,9 @@
         textblockVerts.text = "Vertices: " + scene.getTotalVertices();
         textblockMeshes.text = "Meshes: " + scene.getActiveMeshes().length;
     });
+    
+    //Hide Loader
+    engine.hideLoadingUI();
     
     return scene;
 };
@@ -677,7 +679,8 @@ window.initFunction = async function() {
 
         window.engine = await asyncEngineCreation();
         if (!engine) throw 'engine should not be null.';
-           
+        
+
         startRenderLoop(engine, canvas);
         window.scene = createScene();
     };        
