@@ -654,10 +654,10 @@
         
     scene.registerAfterRender(() => {
         textblockFPS.text = "FPS: " + Math.round(scene.getEngine().getFps());        
-        textblockDrawCalls.text = "Draw Calls: " + instrumentation.drawCallsCounter.current;
-        textblockFaces.text = "Triangles: " + scene.getActiveIndices() / 3;
-        textblockVerts.text = "Vertices: " + scene.getTotalVertices();
-        textblockMeshes.text = "Meshes: " + scene.getActiveMeshes().length;
+        textblockDrawCalls.text = instrumentation.drawCallsCounter.current;
+        textblockFaces.text =  scene.getActiveIndices() / 3;
+        textblockVerts.text =  scene.getTotalVertices();
+        textblockMeshes.text = scene.getActiveMeshes().length;
     });
     
     //Hide Loader
