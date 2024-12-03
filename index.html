@@ -653,7 +653,7 @@
     var textblockMeshes = advancedTexture.getControlByName("TextblockMeshes");
         
     scene.registerAfterRender(() => {
-        textblockFPS.text = "FPS: " + Math.round(scene.getEngine().getFps());        
+        textblockFPS.text = " " + Math.round(scene.getEngine().getFps());        
         textblockDrawCalls.text = instrumentation.drawCallsCounter.current;
         textblockFaces.text =  scene.getActiveIndices() / 3;
         textblockVerts.text =  scene.getTotalVertices();
