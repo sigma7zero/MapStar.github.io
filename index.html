@@ -474,10 +474,10 @@
     terrainButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("illuminateTerrainButton").isVisible = true });
     terrainButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("illuminateTerrainButton").isVisible = false });
 
-    let pathwaysButton = advancedTexture.getControlByName("ButtonPathways");
-    pathwaysButton.onPointerUpObservable.add(function () { alert("ButtonPathways Pressed!...."); });
-    pathwaysButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("illuminatePathwaysButton").isVisible = true });
-    pathwaysButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("illuminatePathwaysButton").isVisible = false });
+    let physicsButton = advancedTexture.getControlByName("ButtonPhysics");
+    physicsButton.onPointerUpObservable.add(function () { alert("Physics Button Pressed!...."); });
+    physicsButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("illuminatePhysicsButton").isVisible = true });
+    physicsButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("illuminatePhysicsButton").isVisible = false });
 
     let buildingsButton = advancedTexture.getControlByName("ButtonBuildings");
     buildingsButton.onPointerUpObservable.add(function () { alert("ButtonBuildings Pressed!...."); });
