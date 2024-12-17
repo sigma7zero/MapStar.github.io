@@ -126,7 +126,70 @@
     let advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("GUI", true, scene);              
     let loadedGUI = await advancedTexture.parseFromURLAsync("https://raw.githubusercontent.com/sigma7zero/MapStar.github.io/main/guiTexture.json");
        
-    // HELPERS  
+    // HELPERS      
+    // Download the scene to the client's machine (Note: Web Safe)
+    var objectUrl;
+
+    function downloadSceneFile(filename, scene) {
+        if(objectUrl) {
+            window.URL.revokeObjectURL(objectUrl);
+        }
+    
+        var serializedScene = BABYLON.SceneSerializer.Serialize(scene);
+        
+        var strMesh = JSON.stringify(serializedScene);
+    
+        if (filename.toLowerCase().lastIndexOf(".babylon") !== filename.length - 8 || filename.length < 9){
+            filename += ".babylon";
+        }
+            
+	    var blob = new Blob ( [ strMesh ], { type : "octet/stream" } );
+       
+        // turn blob into an object URL; saved as a member, so can be cleaned out later
+        objectUrl = (window.webkitURL || window.URL).createObjectURL(blob);
+    
+        var link = window.document.createElement('a');
+        link.href = objectUrl;
+        link.download = filename;
+        var click = document.createEvent("MouseEvents");
+        click.initEvent("click", true, false);
+        link.dispatchEvent(click);          
+    }
+
+    function serializedSceneToString(_scene){
+        if (_scene == null) return 0;        
+        var serializedScene = BABYLON.SceneSerializer.Serialize(scene);
+	    var strScene = JSON.stringify(serializedScene);
+        return strScene;
+    }
+
+    function saveTextAsFile(strToSave, fileNameToSaveAs){
+
+        var textToWrite = strToSave;
+        var textFileAsBlob = new Blob([textToWrite], {type:'text/plain'});    
+        var downloadLink = document.createElement("a");
+        downloadLink.download = fileNameToSaveAs;
+        downloadLink.innerHTML = "Download File";
+        if (window.webkitURL != null)
+        {
+            // Chrome allows the link to be clicked
+            // without actually adding it to the DOM.
+            downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+        }
+        else
+        {
+            // Firefox requires the link to be added to the DOM
+            // before it can be clicked.
+            downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+            downloadLink.onclick = destroyClickedElement;
+            downloadLink.style.display = "none";
+            document.body.appendChild(downloadLink);
+        }
+
+        downloadLink.click();
+    }
+
+    //Stats etc
     var instrumentation = new BABYLON.SceneInstrumentation(scene);    
     var toggleStats = true;    
     if (toggleStats){
@@ -142,7 +205,8 @@
         instrumentation.captureAnimationsTime = true;
     }
     
-    const urlText = 'https://corsproxy.io/?' + encodeURIComponent('https://raw.githubusercontent.com/sigma7zero/MapStar/main/fileManifest.txt');
+    //const urlText = 'https://corsproxy.io/?' + encodeURIComponent('https://raw.githubusercontent.com/sigma7zero/MapStar/main/fileManifest.txt');
+    const urlText = 'https://raw.githubusercontent.com/sigma7zero/MapStar/main/fileManifest.txt';
 
     function getText(url){
         //read text from url location 
@@ -189,6 +253,51 @@
     let openProjectWindow = advancedTexture.getControlByName("OpenWindow");    
     openProjectWindow.isVisible = false;
         
+    //Asset tabs manager
+    let tab_MapsButton = advancedTexture.getControlByName("tab_Maps");
+    let tab_ModelsButton = advancedTexture.getControlByName("tab_Models");
+    let tab_MaterialsButton = advancedTexture.getControlByName("tab_Materials");
+    let tab_TexturesButton = advancedTexture.getControlByName("tab_Textures");
+    let tab_SoundsButton = advancedTexture.getControlByName("tab_Sounds"); 
+     
+    let tab_selected = "Maps";
+    console.log("START TAB: " + tab_selected);
+
+    tab_MapsButton.onPointerUpObservable.add(function () {
+
+        tab_selected = "Maps";
+        console.log("TAB SELECT: " + tab_selected);
+
+    });
+
+    tab_ModelsButton.onPointerUpObservable.add(function () {
+
+        tab_selected = "Models";
+        console.log("TAB SELECT: " + tab_selected);
+    });
+
+    tab_MaterialsButton.onPointerUpObservable.add(function () {
+
+        tab_selected = "Materials";
+        console.log("TAB SELECT: " + tab_selected);
+    });
+
+    tab_TexturesButton.onPointerUpObservable.add(function () {
+
+        tab_selected = "Textures";
+        console.log("TAB SELECT: " + tab_selected);
+    });
+
+    tab_SoundsButton.onPointerUpObservable.add(function () {
+
+        tab_selected = "Sounds";
+        console.log("TAB SELECT: " + tab_selected);
+    });
+
+
+
+
+
     let newButton = advancedTexture.getControlByName("ButtonNew");
     newButton.onPointerUpObservable.add(function () { 
         if (!newProjectWindow.isVisible) {
@@ -443,7 +552,10 @@
         
     smFullScreenButtonLight.isVisible = false;
     smFullScreenButtonMaxIcon.isVisible = true;
-    smFullScreenButtonMinIcon.isVisible = false;    
+    smFullScreenButtonMinIcon.isVisible = false; 
+    
+    let CreatePanelEndPoint = advancedTexture.getControlByName("CreatePanelEndPoint");
+
 
     smFullscreenButton.onPointerUpObservable.add(function () {
         
@@ -452,12 +564,18 @@
             smFullScreenButtonMaxIcon.isVisible = false;
             smFullScreenButtonMinIcon.isVisible = true;
             fullScreenToggle = true;
+
+            // Turn off slider in fullscreen mode
+            CreatePanelEndPoint.isVisible = false;
         }
         else{
             document.exitFullscreen();
             smFullScreenButtonMaxIcon.isVisible = true;
             smFullScreenButtonMinIcon.isVisible = false;
             fullScreenToggle = false;
+
+            // Turn on slider in window mode
+            CreatePanelEndPoint.isVisible = true;
         }       
     });
 
@@ -662,6 +780,9 @@
     
     //Hide Loader
     engine.hideLoadingUI();
+
+    //var mapFile = serializedSceneToString(scene);
+    //console.log("Scene File: \n" + mapFile);
     
     return scene;
 };
