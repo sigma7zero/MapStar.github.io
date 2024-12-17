@@ -276,6 +276,11 @@
 
         tab_selected = "Maps";
 	selectMarkerDotMaps.isVisible = true;
+	selectMarkerDotModels.isVisible = false;
+	selectMarkerDotMaterials.isVisible = false;
+	selectMarkerDotTextures.isVisible = false;
+	selectMarkerDotSounds.isVisible = false;
+	    
         console.log("TAB SELECT: " + tab_selected);
 
     });
@@ -283,27 +288,43 @@
     tab_ModelsButton.onPointerUpObservable.add(function () {
 
         tab_selected = "Models";
+	selectMarkerDotMaps.isVisible = false;
 	selectMarkerDotModels.isVisible = true;
+	selectMarkerDotMaterials.isVisible = false;
+	selectMarkerDotTextures.isVisible = false;
+	selectMarkerDotSounds.isVisible = false;
         console.log("TAB SELECT: " + tab_selected);
     });
 
     tab_MaterialsButton.onPointerUpObservable.add(function () {
 
         tab_selected = "Materials";
+	selectMarkerDotMaps.isVisible = false;
+	selectMarkerDotModels.isVisible = false;
 	selectMarkerDotMaterials.isVisible = true;
+	selectMarkerDotTextures.isVisible = false;
+	selectMarkerDotSounds.isVisible = false;
         console.log("TAB SELECT: " + tab_selected);
     });
 
     tab_TexturesButton.onPointerUpObservable.add(function () {
 
         tab_selected = "Textures";
+	selectMarkerDotMaps.isVisible = false;
+	selectMarkerDotModels.isVisible = false;
+	selectMarkerDotMaterials.isVisible = false;
 	selectMarkerDotTextures.isVisible = true;
+	selectMarkerDotSounds.isVisible = false;
         console.log("TAB SELECT: " + tab_selected);
     });
 
     tab_SoundsButton.onPointerUpObservable.add(function () {
 
         tab_selected = "Sounds";
+	selectMarkerDotMaps.isVisible = false;
+	selectMarkerDotModels.isVisible = false;
+	selectMarkerDotMaterials.isVisible = false;
+	selectMarkerDotTextures.isVisible = false;
 	selectMarkerDotSounds.isVisible = true;
         console.log("TAB SELECT: " + tab_selected);
     });
