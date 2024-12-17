@@ -264,13 +264,18 @@
     let tab_MaterialsButton = advancedTexture.getControlByName("tab_Materials");
     let tab_TexturesButton = advancedTexture.getControlByName("tab_Textures");
     let tab_SoundsButton = advancedTexture.getControlByName("tab_Sounds"); 
-     
+    let selectMarkerDotMaps = advancedTexture.getControlByName("selectMarkerDotMaps");
+    let selectMarkerDotModels = advancedTexture.getControlByName("selectMarkerDotModels");
+    let selectMarkerDotMaterials = advancedTexture.getControlByName("selectMarkerDotMaterials");
+    let selectMarkerDotTextures = advancedTexture.getControlByName("selectMarkerDotTextures");
+    let selectMarkerDotSounds = advancedTexture.getControlByName("selectMarkerDotSounds");
     let tab_selected = "Maps";
     console.log("START TAB: " + tab_selected);
 
     tab_MapsButton.onPointerUpObservable.add(function () {
 
         tab_selected = "Maps";
+	selectMarkerDotMaps.isVisible = true;
         console.log("TAB SELECT: " + tab_selected);
 
     });
@@ -278,24 +283,28 @@
     tab_ModelsButton.onPointerUpObservable.add(function () {
 
         tab_selected = "Models";
+	selectMarkerDotModels.isVisible = true;
         console.log("TAB SELECT: " + tab_selected);
     });
 
     tab_MaterialsButton.onPointerUpObservable.add(function () {
 
         tab_selected = "Materials";
+	selectMarkerDotMaterials.isVisible = true;
         console.log("TAB SELECT: " + tab_selected);
     });
 
     tab_TexturesButton.onPointerUpObservable.add(function () {
 
         tab_selected = "Textures";
+	selectMarkerDotTextures.isVisible = true;
         console.log("TAB SELECT: " + tab_selected);
     });
 
     tab_SoundsButton.onPointerUpObservable.add(function () {
 
         tab_selected = "Sounds";
+	selectMarkerDotSounds.isVisible = true;
         console.log("TAB SELECT: " + tab_selected);
     });
 
