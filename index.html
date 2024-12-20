@@ -207,13 +207,13 @@
 
     //const urlText = 'https://corsproxy.io/?https://raw.githubusercontent.com/sigma7zero/MapStar/main/fileManifest.txt';
     //const urlText = 'https://corsproxy.io/?' + encodeURIComponent('https://raw.githubusercontent.com/sigma7zero/MapStar/main/fileManifest.txt');
-    const urlText = "https://raw.githubusercontent.com/sigma7zero/MapStar/refs/heads/main/fileManifest.txt"    
     //const urlText = 'https://raw.githubusercontent.com/sigma7zero/MapStar/main/fileManifest.txt';
-
     //const proxy = "https://cors-anywhere.herokuapp.com/";
     //const fileManifest  = "https://raw.githubusercontent.com/sigma7zero/MapStar/main/fileManifest.txt"; 
     //const urlText = proxy + fileManifest;
-	    
+
+	const urlText = "https://raw.githubusercontent.com/sigma7zero/MapStar/refs/heads/main/fileManifest.txt"    
+
     function getText(url){
         //read text from url location 
         var request = new XMLHttpRequest();
@@ -259,76 +259,124 @@
     let openProjectWindow = advancedTexture.getControlByName("OpenWindow");    
     openProjectWindow.isVisible = false;
         
-    //Asset tabs manager
+    //Asset tabs manager - bindings
+    //Select tab buttons
     let tab_MapsButton = advancedTexture.getControlByName("tab_Maps");
     let tab_ModelsButton = advancedTexture.getControlByName("tab_Models");
     let tab_MaterialsButton = advancedTexture.getControlByName("tab_Materials");
     let tab_TexturesButton = advancedTexture.getControlByName("tab_Textures");
     let tab_SoundsButton = advancedTexture.getControlByName("tab_Sounds"); 
+
+    //Red dot selection inicators
     let selectMarkerDotMaps = advancedTexture.getControlByName("selectMarkerDotMaps");
     let selectMarkerDotModels = advancedTexture.getControlByName("selectMarkerDotModels");
     let selectMarkerDotMaterials = advancedTexture.getControlByName("selectMarkerDotMaterials");
     let selectMarkerDotTextures = advancedTexture.getControlByName("selectMarkerDotTextures");
     let selectMarkerDotSounds = advancedTexture.getControlByName("selectMarkerDotSounds");
+    
+    //Red line selection indicators
+    let selectMapMarkerLine = advancedTexture.getControlByName("MapMarker");
+    let selectModelMarkerLine = advancedTexture.getControlByName("ModelMarker");
+    let selectMaterialMarkerLine = advancedTexture.getControlByName("MaterialsMarker");
+    let selectTextureMarkerLine = advancedTexture.getControlByName("TextureMarker");
+    let selectSoundMarkerLine = advancedTexture.getControlByName("SoundMarker");
+    
+    function resetMarkerDots(){
+        selectMarkerDotMaps.isVisible = false;
+        selectMarkerDotModels.isVisible = false;
+        selectMarkerDotMaterials.isVisible = false;
+        selectMarkerDotTextures.isVisible = false;
+        selectMarkerDotSounds.isVisible = false;
+    }
+
+    function resetMarkerLines(){
+        selectMapMarkerLine.isVisible = false;
+        selectModelMarkerLine.isVisible = false;
+        selectMaterialMarkerLine.isVisible = false;
+        selectTextureMarkerLine.isVisible = false;
+        selectSoundMarkerLine.isVisible = false;
+    }   
+    
+    //Asset panel viewing modes
+    let soundAssetsViewer = advancedTexture.getControlByName("ScrollViewerSounds");
+    let textureAssetsViewer = advancedTexture.getControlByName("ScrollViewerTextures");
+    let materialAssetsViewer = advancedTexture.getControlByName("ScrollViewerMaterials");
+    let modelAssetsViewer = advancedTexture.getControlByName("ScrollViewerModels");
+    let mapAssetsViewer = advancedTexture.getControlByName("ScrollViewerMaps");
+
+    function resetAssetViewer(){
+        soundAssetsViewer.isVisible = false;
+        textureAssetsViewer.isVisible = false;
+        materialAssetsViewer.isVisible = false;
+        modelAssetsViewer.isVisible = false;
+        mapAssetsViewer.isVisible = false;
+    }
+
     let tab_selected = "Maps";
     console.log("START TAB: " + tab_selected);
 
     tab_MapsButton.onPointerUpObservable.add(function () {
-
-        tab_selected = "Maps";
-	selectMarkerDotMaps.isVisible = true;
-	selectMarkerDotModels.isVisible = false;
-	selectMarkerDotMaterials.isVisible = false;
-	selectMarkerDotTextures.isVisible = false;
-	selectMarkerDotSounds.isVisible = false;
-	    
+        
+        resetMarkerDots();
+        resetMarkerLines();
+        resetAssetViewer()
+        tab_selected = "Maps";        
+	    selectMarkerDotMaps.isVisible = true;
+        selectMapMarkerLine.isVisible = true;
+        mapAssetsViewer.isVisible = true;	    
         console.log("TAB SELECT: " + tab_selected);
 
     });
 
     tab_ModelsButton.onPointerUpObservable.add(function () {
 
-        tab_selected = "Models";
-	selectMarkerDotMaps.isVisible = false;
-	selectMarkerDotModels.isVisible = true;
-	selectMarkerDotMaterials.isVisible = false;
-	selectMarkerDotTextures.isVisible = false;
-	selectMarkerDotSounds.isVisible = false;
+        resetMarkerDots();
+        resetMarkerLines();
+        resetAssetViewer()
+        tab_selected = "Models";	    
+	    selectMarkerDotModels.isVisible = true;
+        selectModelMarkerLine.isVisible = true;
+        modelAssetsViewer.isVisible = true;
         console.log("TAB SELECT: " + tab_selected);
     });
 
     tab_MaterialsButton.onPointerUpObservable.add(function () {
 
+        resetMarkerDots();
+        resetMarkerLines();
+        resetAssetViewer()
         tab_selected = "Materials";
-	selectMarkerDotMaps.isVisible = false;
-	selectMarkerDotModels.isVisible = false;
-	selectMarkerDotMaterials.isVisible = true;
-	selectMarkerDotTextures.isVisible = false;
-	selectMarkerDotSounds.isVisible = false;
+	    selectMarkerDotMaterials.isVisible = true;
+        selectMaterialMarkerLine.isVisible = true;
+        materialAssetsViewer.isVisible = true;
         console.log("TAB SELECT: " + tab_selected);
     });
 
     tab_TexturesButton.onPointerUpObservable.add(function () {
 
+        resetMarkerDots();
+        resetMarkerLines();
+        resetAssetViewer()
         tab_selected = "Textures";
-	selectMarkerDotMaps.isVisible = false;
-	selectMarkerDotModels.isVisible = false;
-	selectMarkerDotMaterials.isVisible = false;
-	selectMarkerDotTextures.isVisible = true;
-	selectMarkerDotSounds.isVisible = false;
+	    selectMarkerDotTextures.isVisible = true;
+        selectTextureMarkerLine.isVisible = true;
+        textureAssetsViewer.isVisible = true;
         console.log("TAB SELECT: " + tab_selected);
     });
 
     tab_SoundsButton.onPointerUpObservable.add(function () {
 
+        resetMarkerDots();
+        resetMarkerLines();
+        resetAssetViewer()
         tab_selected = "Sounds";
-	selectMarkerDotMaps.isVisible = false;
-	selectMarkerDotModels.isVisible = false;
-	selectMarkerDotMaterials.isVisible = false;
-	selectMarkerDotTextures.isVisible = false;
-	selectMarkerDotSounds.isVisible = true;
+	    selectMarkerDotSounds.isVisible = true;
+        selectSoundMarkerLine.isVisible = true;        
+        soundAssetsViewer.isVisible = true;
         console.log("TAB SELECT: " + tab_selected);
     });
+
+    
 
 
 
