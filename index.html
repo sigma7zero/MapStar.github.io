@@ -205,13 +205,6 @@
         instrumentation.captureAnimationsTime = true;
     }
 
-    //const urlText = 'https://corsproxy.io/?https://raw.githubusercontent.com/sigma7zero/MapStar/main/fileManifest.txt';
-    //const urlText = 'https://corsproxy.io/?' + encodeURIComponent('https://raw.githubusercontent.com/sigma7zero/MapStar/main/fileManifest.txt');
-    //const urlText = 'https://raw.githubusercontent.com/sigma7zero/MapStar/main/fileManifest.txt';
-    //const proxy = "https://cors-anywhere.herokuapp.com/";
-    //const fileManifest  = "https://raw.githubusercontent.com/sigma7zero/MapStar/main/fileManifest.txt"; 
-    //const urlText = proxy + fileManifest;
-
 	const urlText = "https://raw.githubusercontent.com/sigma7zero/MapStar/refs/heads/main/fileManifest.txt"    
 
     function getText(url){
@@ -259,7 +252,7 @@
     let openProjectWindow = advancedTexture.getControlByName("OpenWindow");    
     openProjectWindow.isVisible = false;
         
-    //Asset tabs manager - bindings
+    //Asset tabs manager -------------------------------------------------------------------------------------------
     //Select tab buttons
     let tab_MapsButton = advancedTexture.getControlByName("tab_Maps");
     let tab_ModelsButton = advancedTexture.getControlByName("tab_Models");
@@ -281,6 +274,43 @@
     let selectTextureMarkerLine = advancedTexture.getControlByName("TextureMarker");
     let selectSoundMarkerLine = advancedTexture.getControlByName("SoundMarker");
     
+    //File selection buttons
+    let maxMapFiles = 3;
+    let mapsThumb_1 = advancedTexture.getControlByName("MapsThumb_1");
+    let mapsThumb_2 = advancedTexture.getControlByName("MapsThumb_2");
+    let mapsThumb_3 = advancedTexture.getControlByName("MapsThumb_3");
+    let selectColor = "rgba(0, 255, 13, 255)";
+    
+    function resetMapThumbnails(){
+        mapsThumb_1.color = "black";
+        mapsThumb_2.color = "black";
+        mapsThumb_3.color = "black";
+    }
+      
+    mapsThumb_1.onPointerUpObservable.add(function () {
+        resetMapThumbnails();
+        mapsThumb_1.color = selectColor;
+
+    });
+        
+    mapsThumb_2.onPointerUpObservable.add(function () {
+        resetMapThumbnails();
+        mapsThumb_2.color = selectColor;
+
+    });
+
+    mapsThumb_3.onPointerUpObservable.add(function () {
+        resetMapThumbnails();
+        mapsThumb_3.color = selectColor;
+
+    });
+
+
+
+    
+
+
+
     function resetMarkerDots(){
         selectMarkerDotMaps.isVisible = false;
         selectMarkerDotModels.isVisible = false;
