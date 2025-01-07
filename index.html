@@ -205,7 +205,7 @@
         instrumentation.captureAnimationsTime = true;
     }
 
-	const urlText = "https://raw.githubusercontent.com/sigma7zero/MapStar/refs/heads/main/fileManifest.txt"    
+    const urlText = "https://raw.githubusercontent.com/sigma7zero/MapStar/refs/heads/main/fileManifest.txt"    
 
     function getText(url){
         //read text from url location 
@@ -242,16 +242,7 @@
      });
     deleteURLFromLibraryButton.onPointerEnterObservable.add(function () { deleteURLButtonLight.isVisible = true });
     deleteURLFromLibraryButton.onPointerOutObservable.add(function () { deleteURLButtonLight.isVisible = false });
-    
-    let newProjectWindow = advancedTexture.getControlByName("NewWindow");    
-    newProjectWindow.isVisible = false;
-        
-    let saveProjectWindow = advancedTexture.getControlByName("SaveWindow");
-    saveProjectWindow.isVisible = false;
-
-    let openProjectWindow = advancedTexture.getControlByName("OpenWindow");    
-    openProjectWindow.isVisible = false;
-        
+           
     //Asset tabs manager -------------------------------------------------------------------------------------------
     //Select tab buttons
     let tab_MapsButton = advancedTexture.getControlByName("tab_Maps");
@@ -407,35 +398,46 @@
     });
 
     
+        
+    let saveProjectWindow = advancedTexture.getControlByName("SaveWindow");
+    saveProjectWindow.isVisible = false;
+
+    
 
 
 
 
-
+	    
     let newButton = advancedTexture.getControlByName("ButtonNew");
-    let newButtonLight = advancedTexture.getControlByName("illuminateNewButton");	    
+    let newButtonLight = advancedTexture.getControlByName("illuminateNewButton");
+    let newProjectWindow = advancedTexture.getControlByName("NewWindow");       	    
+
+    newProjectWindow.isVisible = false;	
     newButtonLight.isVisible = newProjectWindow.isVisible; 
 	    
     newButton.onPointerUpObservable.add(function () { 
         if (!newProjectWindow.isVisible) {
-            newProjectWindow.isVisible = true;
-            //advancedTexture.getControlByName("illuminateNewButton").isVisible = true
+            newProjectWindow.isVisible = true;           
 	    newButtonLight.isVisible = true;
         }
         else {
-            newProjectWindow.isVisible = false;
-            //advancedTexture.getControlByName("illuminateNewButton").isVisible = false
+            newProjectWindow.isVisible = false;           
 	    newButtonLight.isVisible = false;	
         }
         });
+   
+    newButton.onPointerEnterObservable.add(function () { 
+	if (!newProjectWindow.isVisible) {    
+	    newButtonLight.isVisible = true; });
+    
+    newButton.onPointerOutObservable.add(function () { 
+	if (!newProjectWindow.isVisible) {    
+	    newButtonLight.isVisible = false; });
 
-    //newButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("illuminateNewButton").isVisible = true });
-    //newButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("illuminateNewButton").isVisible = false });
-    newButton.onPointerEnterObservable.add(function () { newButtonLight.isVisible = true; });
-    newButton.onPointerOutObservable.add(function () { newButtonLight.isVisible = false; });
 
-
-
+     let openProjectWindow = advancedTexture.getControlByName("OpenWindow");    
+     openProjectWindow.isVisible = false;
+	    
 
 	    
     let openButton = advancedTexture.getControlByName("ButtonOpen");
@@ -473,13 +475,23 @@
     exportButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("illuminateExportButton").isVisible = true });
     exportButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("illuminateExportButton").isVisible = false });
 
-    let envButton = advancedTexture.getControlByName("envButton");
-    let envButtonLight = advancedTexture.getControlByName("envButtonLight");
     
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+    let envButton = advancedTexture.getControlByName("envButton");
+    let envButtonLight = advancedTexture.getControlByName("envButtonLight");    
     let envWindow = advancedTexture.getControlByName("envWindow");        
-    envWindow.isVisible = false;
-        
+    
+    envWindow.isVisible = false;        
     envButtonLight.isVisible = envWindow.isVisible;
+    
     envButton.onPointerUpObservable.add(function () {
         if (!envWindow.isVisible) {
             envWindow.isVisible = true;
