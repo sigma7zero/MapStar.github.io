@@ -413,20 +413,31 @@
 
 
     let newButton = advancedTexture.getControlByName("ButtonNew");
+    let newButtonLight = advancedTexture.getControlByName("ButtonNew");	    
+    newButtonLight.isVisible = newProjectWindow.isVisible; 
+	    
     newButton.onPointerUpObservable.add(function () { 
         if (!newProjectWindow.isVisible) {
             newProjectWindow.isVisible = true;
-            advancedTexture.getControlByName("illuminateNewButton").isVisible = true
+            //advancedTexture.getControlByName("illuminateNewButton").isVisible = true
+	    newButtonLight.isVisible = true;
         }
         else {
             newProjectWindow.isVisible = false;
-            advancedTexture.getControlByName("illuminateNewButton").isVisible = false
+            //advancedTexture.getControlByName("illuminateNewButton").isVisible = false
+	    newButtonLight.isVisible = false;	
         }
         });
 
-    newButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("illuminateNewButton").isVisible = true });
-    newButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("illuminateNewButton").isVisible = false });
- 
+    //newButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("illuminateNewButton").isVisible = true });
+    //newButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("illuminateNewButton").isVisible = false });
+    newButton.onPointerEnterObservable.add(function () { newButtonLight.isVisible = true; });
+    newButton.onPointerOutObservable.add(function () { newButtonLight.isVisible = false; });
+
+
+
+
+	    
     let openButton = advancedTexture.getControlByName("ButtonOpen");
     openButton.onPointerUpObservable.add(function () { 
          if (!openProjectWindow.isVisible) {
