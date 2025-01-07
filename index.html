@@ -401,17 +401,11 @@
         
     let saveProjectWindow = advancedTexture.getControlByName("SaveWindow");
     saveProjectWindow.isVisible = false;
-
-    
-
-
-
-
 	    
     let newButton = advancedTexture.getControlByName("ButtonNew");
     let newButtonLight = advancedTexture.getControlByName("illuminateNewButton");
     let newProjectWindow = advancedTexture.getControlByName("NewWindow");       	    
-
+/*
     newProjectWindow.isVisible = false;	
     newButtonLight.isVisible = newProjectWindow.isVisible; 
 	    
@@ -433,14 +427,12 @@
     newButton.onPointerOutObservable.add(function () { 
 	if (!newProjectWindow.isVisible) {    
 	    newButtonLight.isVisible = false; });
+*/
 
-
-     let openProjectWindow = advancedTexture.getControlByName("OpenWindow");    
-     openProjectWindow.isVisible = false;
-	    
-
-	    
+    let openProjectWindow = advancedTexture.getControlByName("OpenWindow");    
+    openProjectWindow.isVisible = false;
     let openButton = advancedTexture.getControlByName("ButtonOpen");
+    
     openButton.onPointerUpObservable.add(function () { 
          if (!openProjectWindow.isVisible) {
             openProjectWindow.isVisible = true;
