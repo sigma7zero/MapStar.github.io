@@ -404,7 +404,8 @@
 	    
     let newButton = advancedTexture.getControlByName("ButtonNew");
     let newButtonLight = advancedTexture.getControlByName("illuminateNewButton");
-    let newProjectWindow = advancedTexture.getControlByName("NewWindow");  
+    let newProjectWindow = advancedTexture.getControlByName("NewWindow"); 
+    let newProjectCancelButton = adbancedTexture.getControlByName("cancelNewProject");
 
     newProjectWindow.isVisible = false;        
     newButtonLight.isVisible = newProjectWindow.isVisible;
@@ -432,7 +433,9 @@
         }
     });
 
-
+    newProjectCancelButton.onPointerUpObservable.add(function () {
+       
+    });
 
 
 	    
