@@ -441,9 +441,14 @@
 
 	    
     let openProjectWindow = advancedTexture.getControlByName("OpenWindow");    
-    openProjectWindow.isVisible = false;
     let openButton = advancedTexture.getControlByName("ButtonOpen");
     
+    let cancelOpenButton = advancedTexture.getControlByName("cancelOpenButton");
+
+	    
+    openProjectWindow.isVisible = false;
+
+	    
     openButton.onPointerUpObservable.add(function () { 
          if (!openProjectWindow.isVisible) {
             openProjectWindow.isVisible = true;
