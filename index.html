@@ -6,7 +6,7 @@
         <title>Map Star</title>
 
         <!-- Babylon.js -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.6.2/dat.gui.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.6.2/dat.gui.min.js"></script>        
         <script src="https://assets.babylonjs.com/generated/Assets.js"></script>
         <script src="https://cdn.babylonjs.com/recast.js"></script>
         <script src="https://cdn.babylonjs.com/ammo.js"></script>
@@ -23,6 +23,8 @@
         <script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
         <script src="https://cdn.babylonjs.com/addons/babylonjs.addons.min.js"></script>
         <script src="https://cdn.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
+
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
         <style>
             html,
@@ -71,6 +73,9 @@
 
     scene.clearColor = new BABYLON.Color3(0, 0, 0).toLinearSpace();
    
+    
+
+
     // Sky sphere
     var skySphere = BABYLON.MeshBuilder.CreateSphere("sphere", { diameter: 1024, segments: 32 }, scene);
     skySphere.flipFaces(true);
@@ -694,13 +699,12 @@
     let smFullScreenButtonLight = advancedTexture.getControlByName("smFullScreenButtonLight");
     let smFullScreenButtonMaxIcon = advancedTexture.getControlByName("ImageMaxScreen");
     let smFullScreenButtonMinIcon = advancedTexture.getControlByName("ImageMinScreen");
+    let CreatePanelEndPoint = advancedTexture.getControlByName("CreatePanelEndPoint");    
         
     smFullScreenButtonLight.isVisible = false;
     smFullScreenButtonMaxIcon.isVisible = true;
-    smFullScreenButtonMinIcon.isVisible = false; 
-    
-    let CreatePanelEndPoint = advancedTexture.getControlByName("CreatePanelEndPoint");
-
+    smFullScreenButtonMinIcon.isVisible = false;     
+        
 
     smFullscreenButton.onPointerUpObservable.add(function () {
         
@@ -723,6 +727,24 @@
             CreatePanelEndPoint.isVisible = true;
         }       
     });
+
+    
+    // If the user presses down the Esc key on the physical keyboard, gui must reflect the change
+    function fullscreenChangedHandler(evt){
+        if (document.fullscreenElement){
+            console.log("Entered Fullscreen Mode");
+        }
+        else{
+            console.log("Leaving Fullscreen Mode");
+            smFullScreenButtonMaxIcon.isVisible = true;
+            smFullScreenButtonMinIcon.isVisible = false;
+            fullScreenToggle = false;
+
+            // Turn on slider in window mode
+            CreatePanelEndPoint.isVisible = true;
+        }
+    }
+    document.addEventListener("fullscreenchange", fullscreenChangedHandler);
 
     smFullscreenButton.onPointerEnterObservable.add(function () {
         smFullScreenButtonLight.isVisible = true;
