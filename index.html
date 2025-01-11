@@ -661,8 +661,8 @@
         
         if (!camToggle) {
             camToggle = true;   
-            sm_cameraButton_cameraImage.isVisible = true;
-            sm_cameraButton_gamePadImage.isVisible = false;
+            sm_cameraButton_cameraImage.isVisible = false;
+            sm_cameraButton_gamePadImage.isVisible = true;
             textblockCamType.text = "Arc Rotate Camera";
 
             scene.activeCamera.detachControl(canvas);
@@ -672,8 +672,8 @@
         }
         else {
             camToggle = false;
-            sm_cameraButton_cameraImage.isVisible = false;
-            sm_cameraButton_gamePadImage.isVisible = true;
+            sm_cameraButton_cameraImage.isVisible = true;
+            sm_cameraButton_gamePadImage.isVisible = false;
             textblockCamType.text = "First Person Camera";
             scene.activeCamera.detachControl(canvas);
             scene.activeCamera = gameCamera;
