@@ -5,7 +5,6 @@
 
         <title>Map Star</title>
 
-        <!-- Babylon.js -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.6.2/dat.gui.min.js"></script>        
         <script src="https://assets.babylonjs.com/generated/Assets.js"></script>
         <script src="https://cdn.babylonjs.com/recast.js"></script>
@@ -23,9 +22,9 @@
         <script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
         <script src="https://cdn.babylonjs.com/addons/babylonjs.addons.min.js"></script>
         <script src="https://cdn.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
-
         <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+        
         <style>
             html,
             body {
@@ -168,7 +167,7 @@
         return strScene;
     }
 
-    function saveTextAsFile(strToSave, fileNameToSaveAs){
+    function saveTextAsFile(strToSave, fileNameToSaveAs, pathToFile){
 
         var textToWrite = strToSave;
         var textFileAsBlob = new Blob([textToWrite], {type:'text/plain'});    
@@ -401,18 +400,41 @@
         soundAssetsViewer.isVisible = true;
         console.log("TAB SELECT: " + tab_selected);
     });
-
-    
         
     let saveProjectWindow = advancedTexture.getControlByName("SaveWindow");
     saveProjectWindow.isVisible = false;
 	    
+
+
+
+
+
+
+
+
     let newButton = advancedTexture.getControlByName("ButtonNew");
     let newButtonLight = advancedTexture.getControlByName("illuminateNewButton");
+    
+    
     let newProjectWindow = advancedTexture.getControlByName("NewWindow"); 
     let newProjectCancelButton = advancedTexture.getControlByName("cancelNewProject");
-	
-    newProjectWindow.isVisible = false;        
+    let newProjectApplyButton = advancedTexture.getControlByName("applyNewProjectButton");
+	let newProjectNameInput = advancedTexture.getControlByName("ProjectNameInput");
+    let newProjectWorkspaceInput = advancedTexture.getControlByName("ProjectWorkspaceInput");
+    let newProjectEditorRepoInput = advancedTexture.getControlByName("EditorRepoLink");
+    
+    
+    let newMapFileWindow = advancedTexture.getControlByName("CreateMapFile");
+    let newMapBackButton = advancedTexture.getControlByName("backButtonNew");
+    let newMapApplyButton = advancedTexture.getControlByName("applyDataButton");
+    
+
+
+
+
+
+    newProjectWindow.isVisible = false;
+    newMapFileWindow.isVisible = false;        
     newButtonLight.isVisible = newProjectWindow.isVisible;
     
     newButton.onPointerUpObservable.add(function () {
@@ -443,8 +465,87 @@
         newButtonLight.isVisible = false;
     });
 
-
+    newProjectApplyButton.onPointerUpObservable.add(function () {
+        if (!newMapFileWindow.isVisible){newMapFileWindow.isVisible = true;}        
+        
+    });
 	    
+    newMapBackButton.onPointerUpObservable.add(function () {
+        if (newMapFileWindow.isVisible){newMapFileWindow.isVisible = false;}
+    });
+         
+
+    async function SaveTheFile(_data, _name) {        
+        const options = {
+            types: [
+            {
+                description: 'MapStar Files',
+                accept: {
+                'text/plain': ['.map'],
+                },
+            },
+            ],
+            startIn: "desktop",
+            suggestedName:  _name      
+        
+        };
+
+        const handle = await window.showSaveFilePicker(options);        
+         
+        const writable = await handle.createWritable();
+        
+        await writable.write(_data);
+        
+        await writable.close();
+
+    };
+
+
+
+    newMapApplyButton.onPointerUpObservable.add(function () {
+        if (newMapFileWindow.isVisible){
+            newMapFileWindow.isVisible = false;
+            newProjectWindow.isVisible = false;
+
+            // Save map file to client HD
+            var projectData = 
+                "MAP STAR version 0.1.1\n" +
+                "----------------------\n"+
+                "Project Name : " + newProjectNameInput.text + "\n" +
+                "Project Workspace : " + newProjectWorkspaceInput.text + "\n" +
+                "Editor Repository : " + newProjectEditorRepoInput.text + "\n" +
+                "User Repository 1 : " + "\n" +
+                "User Repository 2 : " + "\n" +
+                "User Repository 3 : " + "\n" +
+                "User Repository 4 : " + "\n" +
+                "User Repository 5 : " + "\n" +
+                "User Repository 6 : " + "\n" ;              
+            
+            SaveTheFile(projectData, newProjectNameInput.text);
+            
+        }
+    });
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     let openProjectWindow = advancedTexture.getControlByName("OpenWindow");    
     let openButton = advancedTexture.getControlByName("ButtonOpen");
     
