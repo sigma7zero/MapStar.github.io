@@ -491,15 +491,23 @@
         
         };
 
-        const handle = await window.showSaveFilePicker(options);        
-         
+	try {    
+        const handle = await window.showSaveFilePicker(options); 
         const writable = await handle.createWritable();
-        
         await writable.write(_data);
-        
         await writable.close();
+	}
+	catch(e){
+	    // If Browser doesn't support showSaveFilePicker(options), defer to FileSaver.js method - put file in Download folder
+            var blob = new Blob([_data], {type: "text/plain;charset=utf-8"});
+            saveAs(blob, _name);
+            console.log("CATCH ENTERED ... Browser threw an error");
+	}
+     };		
+        
+        
 
-    };
+   
 
 
 
