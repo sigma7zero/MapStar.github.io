@@ -495,7 +495,8 @@
         if (newMapFileWindow.isVisible){
             newMapFileWindow.isVisible = false;
             newProjectWindow.isVisible = false;
-
+	    newButtonLight.isVisible = false;
+		
             // Save map file to client HD
             var projectData = 
                 "MAP STAR version 0.1.1\n" +
@@ -511,8 +512,7 @@
                 "User Repository 6 : " + "\n" ;              
             
             SaveTheFile(projectData, newProjectNameInput.text);
-            newButtonLight.visible = false;
-		
+          	
         }
     });
 
