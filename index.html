@@ -403,36 +403,22 @@
         
     let saveProjectWindow = advancedTexture.getControlByName("SaveWindow");
     saveProjectWindow.isVisible = false;
-	    
 
-
-
-
-
-
-
-
+    //New Project window & operations ----------------------------------------------------------------
     let newButton = advancedTexture.getControlByName("ButtonNew");
     let newButtonLight = advancedTexture.getControlByName("illuminateNewButton");
-    
     
     let newProjectWindow = advancedTexture.getControlByName("NewWindow"); 
     let newProjectCancelButton = advancedTexture.getControlByName("cancelNewProject");
     let newProjectApplyButton = advancedTexture.getControlByName("applyNewProjectButton");
-	let newProjectNameInput = advancedTexture.getControlByName("ProjectNameInput");
+    let newProjectNameInput = advancedTexture.getControlByName("ProjectNameInput");
     let newProjectWorkspaceInput = advancedTexture.getControlByName("ProjectWorkspaceInput");
     let newProjectEditorRepoInput = advancedTexture.getControlByName("EditorRepoLink");
-    
     
     let newMapFileWindow = advancedTexture.getControlByName("CreateMapFile");
     let newMapBackButton = advancedTexture.getControlByName("backButtonNew");
     let newMapApplyButton = advancedTexture.getControlByName("applyDataButton");
-    
-
-
-
-
-
+ 
     newProjectWindow.isVisible = false;
     newMapFileWindow.isVisible = false;        
     newButtonLight.isVisible = newProjectWindow.isVisible;
@@ -501,17 +487,11 @@
 	    // If Browser doesn't support showSaveFilePicker(options), defer to FileSaver.js method - put file in Download folder
             var blob = new Blob([_data], {type: "text/plain;charset=utf-8"});
             saveAs(blob, _name);
-            console.log("CATCH ENTERED ... Browser threw an error");
+            console.log("CATCH ENTERED ... Browser throws an error");
 	}
      };		
-        
-        
-
-   
-
-
-
-    newMapApplyButton.onPointerUpObservable.add(function () {
+     
+     newMapApplyButton.onPointerUpObservable.add(function () {
         if (newMapFileWindow.isVisible){
             newMapFileWindow.isVisible = false;
             newProjectWindow.isVisible = false;
@@ -531,7 +511,8 @@
                 "User Repository 6 : " + "\n" ;              
             
             SaveTheFile(projectData, newProjectNameInput.text);
-            
+            newButtonLight.visible = false;
+		
         }
     });
 
