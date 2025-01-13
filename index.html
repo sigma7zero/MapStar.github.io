@@ -406,23 +406,23 @@
 
     //New Project window & operations ----------------------------------------------------------------
     let newButton = advancedTexture.getControlByName("ButtonNew");
-    let newButtonLight = advancedTexture.getControlByName("illuminateNewButton");
-    
+    let newButtonLight = advancedTexture.getControlByName("illuminateNewButton");    
     let newProjectWindow = advancedTexture.getControlByName("NewWindow"); 
     let newProjectCancelButton = advancedTexture.getControlByName("cancelNewProject");
-    let newProjectApplyButton = advancedTexture.getControlByName("applyNewProjectButton");
+    let newProjectApplyButton = advancedTexture.getControlByName("applyNewProjectButton");    
     let newProjectNameInput = advancedTexture.getControlByName("ProjectNameInput");
     let newProjectWorkspaceInput = advancedTexture.getControlByName("ProjectWorkspaceInput");
-    let newProjectEditorRepoInput = advancedTexture.getControlByName("EditorRepoLink");
-    
+    let newProjectEditorRepoInput = advancedTexture.getControlByName("EditorRepoLink");    
     let newMapFileWindow = advancedTexture.getControlByName("CreateMapFile");
     let newMapBackButton = advancedTexture.getControlByName("backButtonNew");
-    let newMapApplyButton = advancedTexture.getControlByName("applyDataButton");
- 
+    let newMapApplyButton = advancedTexture.getControlByName("applyDataButton"); 
     newProjectWindow.isVisible = false;
     newMapFileWindow.isVisible = false;        
     newButtonLight.isVisible = newProjectWindow.isVisible;
-    
+
+    const projectTemplates = ["StartMap", "TableTop", "FirstPerson", "ThirdPerson", "OceanMap", "2DMap"];
+    let selectedTemplate = 0;
+
     newButton.onPointerUpObservable.add(function () {
         if (!newProjectWindow.isVisible) {
             newProjectWindow.isVisible = true;
@@ -450,17 +450,25 @@
         newProjectWindow.isVisible = false;
         newButtonLight.isVisible = false;
     });
+    newProjectCancelButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("cancelNewButtonLight").isVisible = true });    
+    newProjectCancelButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("cancelNewButtonLight").isVisible = false });
+
 
     newProjectApplyButton.onPointerUpObservable.add(function () {
         if (!newMapFileWindow.isVisible){newMapFileWindow.isVisible = true;}        
         
-    });
-	    
+    });	  
+    newProjectApplyButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("applyNewButtonLight").isVisible = true });    
+    newProjectApplyButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("applyNewButtonLight").isVisible = false });
+
+
     newMapBackButton.onPointerUpObservable.add(function () {
         if (newMapFileWindow.isVisible){newMapFileWindow.isVisible = false;}
     });
-         
-
+    newMapBackButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("cancelNewMapModal").isVisible = true });    
+    newMapBackButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("cancelNewMapModal").isVisible = false }); 
+    
+    //Helper
     async function SaveTheFile(_data, _name) {        
         const options = {
             _preferedMethods: ['native', 'constructing-blob'],            
@@ -491,7 +499,8 @@
 	}
      };		
      
-     newMapApplyButton.onPointerUpObservable.add(function () {
+
+    newMapApplyButton.onPointerUpObservable.add(function () {
         if (newMapFileWindow.isVisible){
             newMapFileWindow.isVisible = false;
             newProjectWindow.isVisible = false;
@@ -501,8 +510,9 @@
             var projectData = 
                 "MAP STAR version 0.1.1\n" +
                 "----------------------\n"+
-                "Project Name : " + newProjectNameInput.text + "\n" +
+                "Project Name      : " + newProjectNameInput.text + "\n" +
                 "Project Workspace : " + newProjectWorkspaceInput.text + "\n" +
+                "Project Template  : " + "\n" +
                 "Editor Repository : " + newProjectEditorRepoInput.text + "\n" +
                 "User Repository 1 : " + "\n" +
                 "User Repository 2 : " + "\n" +
@@ -515,24 +525,8 @@
           	
         }
     });
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    newMapApplyButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("applyNewMapLightModal").isVisible = true });    
+    newMapApplyButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("applyNewMapLightModal").isVisible = false }); 
 
 
 
@@ -581,14 +575,6 @@
 
     
 	    
-	    
-	    
-	    
-	    
-	    
-	    
-	    
-	    
     let envButton = advancedTexture.getControlByName("envButton");
     let envButtonLight = advancedTexture.getControlByName("envButtonLight");    
     let envWindow = advancedTexture.getControlByName("envWindow");        
@@ -622,7 +608,7 @@
     let cameraEnvButton = advancedTexture.getControlByName("cameraEnvButton");
     let cameraEnvButtonLight = advancedTexture.getControlByName("cameraEnvButtonLight");
     
-    cameraEnvButton.onPointerUpObservable.add(function () { alert("ButtonTerrain Pressed!...."); });
+    cameraEnvButton.onPointerUpObservable.add(function () { alert("cameraEnvButton Pressed!...."); });
     
     cameraEnvButton.onPointerEnterObservable.add(function () {       
             cameraEnvButtonLight.isVisible = true;        
@@ -635,7 +621,7 @@
     let lightingEnvButton = advancedTexture.getControlByName("lightingEnvButton");
     let lightingEnvButtonLight = advancedTexture.getControlByName("lightingEnvButtonLight");
     
-    lightingEnvButton.onPointerUpObservable.add(function () { alert("ButtonTerrain Pressed!...."); });
+    lightingEnvButton.onPointerUpObservable.add(function () { alert("lightingEnvButton Pressed!...."); });
     
     lightingEnvButton.onPointerEnterObservable.add(function () {       
             lightingEnvButtonLight.isVisible = true;        
