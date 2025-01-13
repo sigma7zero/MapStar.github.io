@@ -422,6 +422,68 @@
 
     const projectTemplates = ["StartMap", "TableTop", "FirstPerson", "ThirdPerson", "OceanMap", "2DMap"];
     let selectedTemplate = 0;
+    let StartMapButton = advancedTexture.getControlByName("StartMapButton");
+    let TableTopMapButton = advancedTexture.getControlByName("TableTopMapButton");
+    let FPSMapButton = advancedTexture.getControlByName("FPSMapButton");
+    let ThirdPersonMapButton = advancedTexture.getControlByName("ThirdPersonMapButton");
+    let OceanMapButton = advancedTexture.getControlByName("OceanMapButton");
+    let twoDMapButton = advancedTexture.getControlByName("2DMapButton");
+    let CarRaceMapButton = advancedTexture.getControlByName("CarRaceMapButton");
+
+
+
+    function resetTemplates(){
+        StartMapButton.color = "black";
+        TableTopMapButton.color = "black";
+        FPSMapButton.color = "black";
+        ThirdPersonMapButton.color = "black";
+        OceanMapButton.color = "black";
+        twoDMapButton.color = "black";
+        CarRaceMapButton.color = "black";
+    }
+
+    StartMapButton.onPointerUpObservable.add(function () {
+        resetTemplates();
+        StartMapButton.color = selectColor;
+        selectedTemplate = 0;
+    });
+
+    TableTopMapButton.onPointerUpObservable.add(function () {
+        resetTemplates();
+        TableTopMapButton.color = selectColor;
+        selectedTemplate = 1;
+    });
+
+    FPSMapButton.onPointerUpObservable.add(function () {
+        resetTemplates();
+        FPSMapButton.color = selectColor;
+        selectedTemplate = 2;
+    });
+
+    ThirdPersonMapButton.onPointerUpObservable.add(function () {
+        resetTemplates();
+        ThirdPersonMapButton.color = selectColor;
+        selectedTemplate = 3;
+    });
+
+    OceanMapButton.onPointerUpObservable.add(function () {
+        resetTemplates();
+        OceanMapButton.color = selectColor;
+        selectedTemplate = 4;
+    });
+
+    twoDMapButton.onPointerUpObservable.add(function () {
+        resetTemplates();
+        twoDMapButton.color = selectColor;
+        selectedTemplate = 5;
+    });
+
+    CarRaceMapButton.onPointerUpObservable.add(function () {
+        resetTemplates();
+        CarRaceMapButton.color = selectColor;
+        selectedTemplate = 6;
+    });
+
 
     newButton.onPointerUpObservable.add(function () {
         if (!newProjectWindow.isVisible) {
@@ -504,7 +566,7 @@
         if (newMapFileWindow.isVisible){
             newMapFileWindow.isVisible = false;
             newProjectWindow.isVisible = false;
-	    newButtonLight.isVisible = false;
+	        newButtonLight.isVisible = false;
 		
             // Save map file to client HD
             var projectData = 
@@ -512,7 +574,7 @@
                 "----------------------\n"+
                 "Project Name      : " + newProjectNameInput.text + "\n" +
                 "Project Workspace : " + newProjectWorkspaceInput.text + "\n" +
-                "Project Template  : " + "\n" +
+                "Project Template  : " + projectTemplates[selectedTemplate] + "\n" +
                 "Editor Repository : " + newProjectEditorRepoInput.text + "\n" +
                 "User Repository 1 : " + "\n" +
                 "User Repository 2 : " + "\n" +
