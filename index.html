@@ -411,13 +411,14 @@
     let newProjectCancelButton = advancedTexture.getControlByName("cancelNewProject");
     let newProjectApplyButton = advancedTexture.getControlByName("applyNewProjectButton");    
     let newProjectNameInput = advancedTexture.getControlByName("ProjectNameInput");
-    let newProjectWorkspaceInput = advancedTexture.getControlByName("ProjectWorkspaceInput");
+    let newProjectWorkspaceInput = advancedTexture.getControlByName("ProjectWorkspace");
     let newProjectEditorRepoInput = advancedTexture.getControlByName("EditorRepoLink");    
     let newMapFileWindow = advancedTexture.getControlByName("CreateMapFile");
     let newMapBackButton = advancedTexture.getControlByName("backButtonNew");
     let newMapApplyButton = advancedTexture.getControlByName("applyDataButton"); 
     newProjectWindow.isVisible = false;
-    newMapFileWindow.isVisible = false;        
+    newMapFileWindow.isVisible = false; 
+    newProjectWorkspaceInput.isVisible = true;       
     newButtonLight.isVisible = newProjectWindow.isVisible;
 
     const projectTemplates = ["StartMap", "TableTop", "FirstPerson", "ThirdPerson", "OceanMap", "2DMap"];
