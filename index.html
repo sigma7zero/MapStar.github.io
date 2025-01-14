@@ -225,28 +225,6 @@
     let textFileList = advancedTexture.getControlByName("TextFileList");
     textFileList.text = fileList;
 
-    // Resources 
-    // Environment Map Library
-    let environmentLibrary = advancedTexture.getControlByName("EnvironmentLibrary");
-    var numberOfUrls = environmentLibrary.text.toString().split(" ").length;
-    //console.log("Environment Library contains: " + numberOfUrls.toString() + " Urls");
-
-    let addURLToLibraryButton = advancedTexture.getControlByName("addURLToLibraryButton");
-    let addURLButtonLight = advancedTexture.getControlByName("addURLButtonLight");
-    addURLToLibraryButton.onPointerUpObservable.add(function () {        
-        addURLButtonLight.isVisible = false;
-     });
-    addURLToLibraryButton.onPointerEnterObservable.add(function () { addURLButtonLight.isVisible = true });
-    addURLToLibraryButton.onPointerOutObservable.add(function () { addURLButtonLight.isVisible = false });
-
-    let deleteURLFromLibraryButton = advancedTexture.getControlByName("deleteURLFromLibraryButton");
-    let deleteURLButtonLight = advancedTexture.getControlByName("deleteURLButtonLight");
-    deleteURLFromLibraryButton.onPointerUpObservable.add(function () {         
-        deleteURLButtonLight.isVisible = false;
-     });
-    deleteURLFromLibraryButton.onPointerEnterObservable.add(function () { deleteURLButtonLight.isVisible = true });
-    deleteURLFromLibraryButton.onPointerOutObservable.add(function () { deleteURLButtonLight.isVisible = false });
-           
     //Asset tabs manager -------------------------------------------------------------------------------------------
     //Select tab buttons
     let tab_MapsButton = advancedTexture.getControlByName("tab_Maps");
@@ -268,12 +246,7 @@
     let selectMaterialMarkerLine = advancedTexture.getControlByName("MaterialsMarker");
     let selectTextureMarkerLine = advancedTexture.getControlByName("TextureMarker");
     let selectSoundMarkerLine = advancedTexture.getControlByName("SoundMarker");
-    
-    //File selection buttons
-    //let maxMapFiles = 3;
-    //let mapsThumb_1 = advancedTexture.getControlByName("MapsThumb_1");
-    //let mapsThumb_2 = advancedTexture.getControlByName("MapsThumb_2");
-    //let mapsThumb_3 = advancedTexture.getControlByName("MapsThumb_3");
+            
     let selectColor = "rgba(0, 255, 13, 255)";
     
     function resetMapThumbnails(){
@@ -281,30 +254,7 @@
         mapsThumb_2.color = "black";
         mapsThumb_3.color = "black";
     }
-   /*   
-    mapsThumb_1.onPointerUpObservable.add(function () {
-        resetMapThumbnails();
-        mapsThumb_1.color = selectColor;
-
-    });
-        
-    mapsThumb_2.onPointerUpObservable.add(function () {
-        resetMapThumbnails();
-        mapsThumb_2.color = selectColor;
-
-    });
-
-    mapsThumb_3.onPointerUpObservable.add(function () {
-        resetMapThumbnails();
-        mapsThumb_3.color = selectColor;
-
-    });
-
-*/
-
-    
-
-
+   
 
     function resetMarkerDots(){
         selectMarkerDotMaps.isVisible = false;
@@ -636,12 +586,13 @@
     exportButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("illuminateExportButton").isVisible = true });
     exportButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("illuminateExportButton").isVisible = false });
 
+
+
     
-	    
+	// Environment (Sky) selection window ----------------------------------------------------------------------------------------------------   
     let envButton = advancedTexture.getControlByName("envButton");
     let envButtonLight = advancedTexture.getControlByName("envButtonLight");    
-    let envWindow = advancedTexture.getControlByName("envWindow");        
-    
+    let envWindow = advancedTexture.getControlByName("envWindow");      
     envWindow.isVisible = false;        
     envButtonLight.isVisible = envWindow.isVisible;
     
@@ -668,60 +619,15 @@
         }
     });
     
-    let cameraEnvButton = advancedTexture.getControlByName("cameraEnvButton");
-    let cameraEnvButtonLight = advancedTexture.getControlByName("cameraEnvButtonLight");
-    
-    cameraEnvButton.onPointerUpObservable.add(function () { alert("cameraEnvButton Pressed!...."); });
-    
-    cameraEnvButton.onPointerEnterObservable.add(function () {       
-            cameraEnvButtonLight.isVisible = true;        
-    });
+    // Create a dynamic array of no fixed size to hold the thumbnails
+    let thumbnails = [];
 
-    cameraEnvButton.onPointerOutObservable.add(function () {       
-            cameraEnvButtonLight.isVisible = false;        
-    });
 
-    let lightingEnvButton = advancedTexture.getControlByName("lightingEnvButton");
-    let lightingEnvButtonLight = advancedTexture.getControlByName("lightingEnvButtonLight");
-    
-    lightingEnvButton.onPointerUpObservable.add(function () { alert("lightingEnvButton Pressed!...."); });
-    
-    lightingEnvButton.onPointerEnterObservable.add(function () {       
-            lightingEnvButtonLight.isVisible = true;        
-    });
 
-    lightingEnvButton.onPointerOutObservable.add(function () {       
-            lightingEnvButtonLight.isVisible = false;        
-    });
 
-    let libraryEnvButton = advancedTexture.getControlByName("libraryEnvButton");
-    let libraryButtonLight = advancedTexture.getControlByName("libraryButtonLight");
-    let libraryEnvWindow = advancedTexture.getControlByName("libraryEnvWindow");
 
-    libraryEnvWindow.isVisible = false;
-    libraryButtonLight.isVisible = libraryEnvWindow.isVisible;
-    libraryEnvButton.onPointerUpObservable.add(function () {
-        if (!libraryEnvWindow.isVisible) {
-            libraryEnvWindow.isVisible = true;
-            libraryButtonLight.isVisible = true;
-        }
-        else {
-            libraryEnvWindow.isVisible = false;
-            libraryButtonLight.isVisible = false;
-        }
-    });
 
-    libraryEnvButton.onPointerEnterObservable.add(function () {
-        if (!libraryEnvWindow.isVisible) {
-            libraryButtonLight.isVisible = true;
-        }
-    });
 
-    libraryEnvButton.onPointerOutObservable.add(function () {
-        if (!libraryEnvWindow.isVisible) {
-            libraryButtonLight.isVisible = false;
-        }
-    });
 
     let cancelEnvButton = advancedTexture.getControlByName("cancelEnvButton");
     let cancelEnvButtonLight = advancedTexture.getControlByName("cancelEnvButtonLight");
@@ -788,6 +694,49 @@
 
     let numberOfThumbNails = loadedGUI.getControlByName("ThumbnailStack").getDescendants(true).length;
        
+    //-------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    let cameraEnvButton = advancedTexture.getControlByName("cameraEnvButton");
+    let cameraEnvButtonLight = advancedTexture.getControlByName("cameraEnvButtonLight");
+    
+    cameraEnvButton.onPointerUpObservable.add(function () { alert("cameraEnvButton Pressed!...."); });
+    
+    cameraEnvButton.onPointerEnterObservable.add(function () {       
+            cameraEnvButtonLight.isVisible = true;        
+    });
+
+    cameraEnvButton.onPointerOutObservable.add(function () {       
+            cameraEnvButtonLight.isVisible = false;        
+    });
+
+    let lightingEnvButton = advancedTexture.getControlByName("lightingEnvButton");
+    let lightingEnvButtonLight = advancedTexture.getControlByName("lightingEnvButtonLight");
+    
+    lightingEnvButton.onPointerUpObservable.add(function () { alert("lightingEnvButton Pressed!...."); });
+    
+    lightingEnvButton.onPointerEnterObservable.add(function () {       
+            lightingEnvButtonLight.isVisible = true;        
+    });
+
+    lightingEnvButton.onPointerOutObservable.add(function () {       
+            lightingEnvButtonLight.isVisible = false;        
+    });
+
     let camToggle = false;
     let sm_cameraButton = advancedTexture.getControlByName("sm_cameraButton");
     let sm_cameraButtonLight = advancedTexture.getControlByName("sm_cameraButtonLight");
@@ -1087,9 +1036,6 @@
     
     //Hide Loader
     engine.hideLoadingUI();
-
-    //var mapFile = serializedSceneToString(scene);
-    //console.log("Scene File: \n" + mapFile);
     
     return scene;
 };
