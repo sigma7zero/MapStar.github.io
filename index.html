@@ -381,8 +381,6 @@
     let twoDMapButton = advancedTexture.getControlByName("2DMapButton");
     let CarRaceMapButton = advancedTexture.getControlByName("CarRaceMapButton");
 
-
-
     function resetTemplates(){
         StartMapButton.color = "black";
         TableTopMapButton.color = "black";
@@ -434,7 +432,6 @@
         CarRaceMapButton.color = selectColor;
         selectedTemplate = 6;
     });
-
 
     newButton.onPointerUpObservable.add(function () {
         if (!newProjectWindow.isVisible) {
@@ -512,7 +509,6 @@
 	}
      };		
      
-
     newMapApplyButton.onPointerUpObservable.add(function () {
         if (newMapFileWindow.isVisible){
             newMapFileWindow.isVisible = false;
@@ -593,6 +589,7 @@
     let envButton = advancedTexture.getControlByName("envButton");
     let envButtonLight = advancedTexture.getControlByName("envButtonLight");    
     let envWindow = advancedTexture.getControlByName("envWindow");      
+    
     envWindow.isVisible = false;        
     envButtonLight.isVisible = envWindow.isVisible;
     
@@ -622,42 +619,33 @@
     // Create a dynamic array of no fixed size to hold the thumbnails
     let thumbnails = [];
 
-
-
-
-
-
-
-
     let cancelEnvButton = advancedTexture.getControlByName("cancelEnvButton");
-    let cancelEnvButtonLight = advancedTexture.getControlByName("cancelEnvButtonLight");
     cancelEnvButton.onPointerUpObservable.add(function () {
-        if (!envWindow.isVisible) {
-            envWindow.isVisible = true;
-            envButtonLight.isVisible = true;
-        }
-        else {
-            envWindow.isVisible = false;
-            envButtonLight.isVisible = false;
-        }
-
-        if (!libraryEnvWindow.isVisible) {
-            libraryEnvWindow.isVisible = true;
-            libraryButtonLight.isVisible = true;
-        }
-        else {
-            libraryEnvWindow.isVisible = false;
-            libraryButtonLight.isVisible = false;
-        }
+        //newProjectWindow.isVisible = false;
+        //newButtonLight.isVisible = false;
+	console.log("EVENT => cancelEnvButton was pressed ...!");
     });
+    cancelEnvButtonLight.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("cancelEnvButtonLight").isVisible = true });    
+    cancelEnvButtonLight.onPointerOutObservable.add(function () { advancedTexture.getControlByName("cancelEnvButtonLight").isVisible = false });
 
-    cancelEnvButton.onPointerEnterObservable.add(function () {       
-            cancelEnvButtonLight.isVisible = true;        
-    });
 
-    cancelEnvButton.onPointerOutObservable.add(function () {       
-            cancelEnvButtonLight.isVisible = false;       
-    });
+
+
+
+    
+   
+
+
+
+
+
+
+
+
+
+
+
+	    
 
 
     let applyEnvButton = advancedTexture.getControlByName("applyEnvButton");
