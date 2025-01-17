@@ -540,13 +540,9 @@
 
 
     let openProjectWindow = advancedTexture.getControlByName("OpenWindow");    
-    let openButton = advancedTexture.getControlByName("ButtonOpen");
-    
-    let cancelOpenButton = advancedTexture.getControlByName("cancelOpenButton");
-
-	    
+    let openButton = advancedTexture.getControlByName("ButtonOpen");    
+    let cancelOpenButton = advancedTexture.getControlByName("cancelOpenButton");	    
     openProjectWindow.isVisible = false;
-
 	    
     openButton.onPointerUpObservable.add(function () { 
          if (!openProjectWindow.isVisible) {
@@ -562,6 +558,14 @@
     openButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("illuminateOpenButton").isVisible = true });
     openButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("illuminateOpenButton").isVisible = false });
 
+
+	    
+
+
+
+
+
+	    
     let saveButton = advancedTexture.getControlByName("ButtonSave");
     saveButton.onPointerUpObservable.add(function () { 
         if (!saveProjectWindow.isVisible) {
@@ -620,9 +624,9 @@
     let thumbnails = [];
 
     let cancelEnvButton = advancedTexture.getControlByName("cancelEnvButton");
-    cancelEnvButton.onPointerUpObservable.add(function () {
-        //newProjectWindow.isVisible = false;
-        //newButtonLight.isVisible = false;
+    cancelEnvButton.onPointerUpObservable.add(function () {       
+	envWindow.isVisible = false;
+	envButtonLight.isVisible = false;        
 	console.log("EVENT => cancelEnvButton was pressed ...!");
     });
     cancelEnvButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("cancelEnvButtonLight").isVisible = true });    
