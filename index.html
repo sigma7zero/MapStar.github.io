@@ -208,9 +208,13 @@
         instrumentation.capturePhysicsTime = true;
         instrumentation.captureAnimationsTime = true;
     }
+    
+    let selectColor = "rgba(0, 255, 13, 255)";
+    let envWindow = advancedTexture.getControlByName("envWindow"); 
 
-    const urlText = "https://raw.githubusercontent.com/sigma7zero/MapStar/refs/heads/main/fileManifest.txt"    
-
+    // Environment Window - map selection system ------------------------------------------------------------------
+    const envRepo = "https://raw.githubusercontent.com/sigma7zero/MapStar/main/Environments/fileManifest.txt";
+     
     function getText(url){
         //read text from url location 
         var request = new XMLHttpRequest();
@@ -218,12 +222,125 @@
         request.send(null);
         return request.responseText;       
     }
-    var fileList = getText(urlText);
-    console.log("List of files in the repository server-side: \n\n" + fileList);
+        
+   
+    let envManifest = getText(envRepo);
+    //console.log("MANIFEST: \n" + envManifest);
+    
+    let envArray = envManifest.split("\n");
+    //console.log("ENVARRAY: " + envArray);
 
-    //Populate Open File Dialog with file list
-    let textFileList = advancedTexture.getControlByName("TextFileList");
-    textFileList.text = fileList;
+    let thumbNail = advancedTexture.getControlByName("ThumbNail");
+    let envThumbnailStack = advancedTexture.getControlByName("EnvThumbnailStack");
+    let envPreviewImage = advancedTexture.getControlByName("EnvPreviewImage");
+    let envThumbnails = [];
+    let envId = 0;    
+
+    // Create an array of thumbnails and add gui control to the stack
+    envArray.forEach(element =>{
+        if (element.includes("_thumb") ){               
+            
+            envThumbnails.push(element);
+            var newThumbNail = thumbNail.clone();
+
+            // set parameters here
+            newThumbNail.color = "black";          
+            
+            // give each thumbnail a unique name (id0 ... id17 etc)
+            newThumbNail.getDescendants()[1].source = envRepo.split("fileManifest.txt")[0] + element; 
+            newThumbNail.getDescendants()[0].name = "env" + envId++;           
+
+            envThumbnailStack.addControl(newThumbNail);
+        }       
+    });
+   
+    // HELPER FUNCTION gets the list of file names
+    function getEnvFileNames(){
+        var _names = [];
+        var _index = 0;        
+        envArray.forEach(element =>{
+            if (element.includes("_thumb") == false){
+                _names[_index++] = element.split(".")[0];
+            }
+        });
+        return _names;
+    };
+    let envNames = getEnvFileNames();
+    console.log("envNames [] => \n" + envNames);
+
+
+
+
+    // hide the first thumbnail, just use clones from this point
+    envThumbnailStack.children[0].isVisible = false;
+    envThumbnailStack.children[1].color = selectColor;
+
+    let sizeOfStack = envThumbnailStack.children.length;
+    //console.log("Size Of Thumbnail Stack:" + sizeOfStack);
+    //console.log("MANIFEST: \n" + envManifest);
+
+    function resetEnvSelector(){
+        for(var n = 0; n < sizeOfStack; n++){
+            envThumbnailStack.children[n].color = 'black';
+        };
+    };
+
+
+    let selectedEnvMap = envThumbnails[0].split("_")[0];
+    let envLabelText = advancedTexture.getControlByName("EnvLabelText");
+    envLabelText.text = selectedEnvMap;
+      
+        
+    for(let i=1; i < sizeOfStack; i++){         
+        
+        envThumbnailStack.children[i].onPointerUpObservable.add(function() {
+            resetEnvSelector();                        
+            console.log("BUTTON id was: " + i);         
+            envThumbnailStack.children[i].color = selectColor;
+            selectedEnvMap = envNames[i-1];
+            envLabelText.text = selectedEnvMap;
+
+            // show a preview of environment
+            envPreviewImage.source = envThumbnailStack.children[i].getDescendants()[1].source; 
+            console.log("envThumbnailStack[i] : \n" + envThumbnailStack.children[i].getDescendants()[1].source);
+
+        });
+    };   
+    
+   
+   
+
+   
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     //Asset tabs manager -------------------------------------------------------------------------------------------
     //Select tab buttons
@@ -246,8 +363,7 @@
     let selectMaterialMarkerLine = advancedTexture.getControlByName("MaterialsMarker");
     let selectTextureMarkerLine = advancedTexture.getControlByName("TextureMarker");
     let selectSoundMarkerLine = advancedTexture.getControlByName("SoundMarker");
-            
-    let selectColor = "rgba(0, 255, 13, 255)";
+      
     
     function resetMapThumbnails(){
         mapsThumb_1.color = "black";
@@ -591,8 +707,7 @@
     
 	// Environment (Sky) selection window ----------------------------------------------------------------------------------------------------   
     let envButton = advancedTexture.getControlByName("envButton");
-    let envButtonLight = advancedTexture.getControlByName("envButtonLight");    
-    let envWindow = advancedTexture.getControlByName("envWindow");      
+    let envButtonLight = advancedTexture.getControlByName("envButtonLight");           
     
     envWindow.isVisible = false;        
     envButtonLight.isVisible = envWindow.isVisible;
@@ -621,7 +736,33 @@
     });
     
     // Create a dynamic array of no fixed size to hold the thumbnails
-    let thumbnails = [];
+    //let thumbnails = [];
+
+    
+
+    //let envThumbnailStack = advancedTexture.getControlByName("EnvThumbnailStack");
+    
+    //let thumbnail1 = advancedTexture.getControlByName("ThumbNail");    
+   // let thumbnail2 = thumbnail1.clone();
+   
+    //envThumbnailStack.addControl(thumbNail2);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     let cancelEnvButton = advancedTexture.getControlByName("cancelEnvButton");
     cancelEnvButton.onPointerUpObservable.add(function () {       
@@ -633,30 +774,12 @@
     cancelEnvButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("cancelEnvButtonLight").isVisible = false });
 
 
-
-
-
-    
-   
-
-
-
-
-
-
-
-
-
-
-
-	    
-
-
     let applyEnvButton = advancedTexture.getControlByName("applyEnvButton");
     let applyEnvButtonLight = advancedTexture.getControlByName("applyEnvButtonLight");
 
     applyEnvButton.onPointerUpObservable.add(function () {
-       //Set this selection as the environment map background 
+        //Set this selection as the environment map background 
+        
         if (!envWindow.isVisible) {
             envWindow.isVisible = true;
             envButtonLight.isVisible = true;
@@ -666,14 +789,7 @@
             envButtonLight.isVisible = false;
         }
         
-       if (!libraryEnvWindow.isVisible) {
-            libraryEnvWindow.isVisible = true;
-            libraryButtonLight.isVisible = true;
-        }
-        else {
-            libraryEnvWindow.isVisible = false;
-            libraryButtonLight.isVisible = false;
-        }      
+       
     });
 
     applyEnvButton.onPointerEnterObservable.add(function () {       
