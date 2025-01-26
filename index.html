@@ -84,12 +84,24 @@
     skySphere.rotate(BABYLON.Axis.X, BABYLON.Tools.ToRadians(180), BABYLON.Space.LOCAL);
     skySphere.receiveShadows = false;
 
-    // Default sky material
-    var skyMaterial = new BABYLON.StandardMaterial("skyMaterial", scene);
-    skyMaterial.emissiveTexture = new BABYLON.Texture("https://dl.dropbox.com/s/7fs6edqfvfqvxua/Azure1.jpg", scene);
-    skyMaterial.useEmissiveAsIllumination = true;
-    skyMaterial.backFaceCulling = false;
-    skySphere.material = skyMaterial;
+    // Env sky material
+    let skyMat = new BABYLON.StandardMaterial("skyMat", scene);
+    
+    function setEnvMap(src, mat, blumin, bFaceCull, skyObj){
+        mat.emissiveTexture = new BABYLON.Texture(src, scene);
+        mat.useEmissiveAsIllumination = blumin;
+        mat.backFaceCulling = bFaceCull;
+        skyObj.material = mat;
+    };
+    
+    setEnvMap(
+        "https://raw.githubusercontent.com/sigma7zero/MapStar/main/Environments/Azure1.jpg",
+        skyMat,
+        true,
+        false,
+        skySphere
+    );
+
 
     // Cameras  
     // 1  
@@ -209,10 +221,11 @@
         instrumentation.captureAnimationsTime = true;
     }
     
-    let selectColor = "rgba(0, 255, 13, 255)";
-    let envWindow = advancedTexture.getControlByName("envWindow"); 
+   
 
     // Environment Window - map selection system ------------------------------------------------------------------
+    let selectColor = "rgba(0, 255, 13, 255)";
+    let envWindow = advancedTexture.getControlByName("envWindow");    
     const envRepo = "https://raw.githubusercontent.com/sigma7zero/MapStar/main/Environments/fileManifest.txt";
      
     function getText(url){
@@ -222,8 +235,7 @@
         request.send(null);
         return request.responseText;       
     }
-        
-   
+       
     let envManifest = getText(envRepo);
     //console.log("MANIFEST: \n" + envManifest);
     
@@ -246,8 +258,10 @@
             // set parameters here
             newThumbNail.color = "black";          
             
-            // give each thumbnail a unique name (id0 ... id17 etc)
+            // create source link (string) to element (asset)
             newThumbNail.getDescendants()[1].source = envRepo.split("fileManifest.txt")[0] + element; 
+            
+            // give each thumbnail a unique name (id0 ... id17 etc)
             newThumbNail.getDescendants()[0].name = "env" + envId++;           
 
             envThumbnailStack.addControl(newThumbNail);
@@ -266,9 +280,7 @@
         return _names;
     };
     let envNames = getEnvFileNames();
-    console.log("envNames [] => \n" + envNames);
-
-
+    //console.log("envNames [] => \n" + envNames);
 
 
     // hide the first thumbnail, just use clones from this point
@@ -288,6 +300,7 @@
 
     let selectedEnvMap = envThumbnails[0].split("_")[0];
     let envLabelText = advancedTexture.getControlByName("EnvLabelText");
+    let selectedEnvSrc = "https://raw.githubusercontent.com/sigma7zero/MapStar/main/Environments/Azure1.jpg";
     envLabelText.text = selectedEnvMap;
       
         
@@ -303,44 +316,13 @@
             // show a preview of environment
             envPreviewImage.source = envThumbnailStack.children[i].getDescendants()[1].source; 
             console.log("envThumbnailStack[i] : \n" + envThumbnailStack.children[i].getDescendants()[1].source);
-
+                        
+            // select the full HDR texture source
+            console.log("Full HDR file location: \n" + envRepo.split("fileManifest.txt")[0] + selectedEnvMap + ".jpg");
+            selectedEnvSrc = envRepo.split("fileManifest.txt")[0] + selectedEnvMap + ".jpg"
         });
     };   
     
-   
-   
-
-   
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     //Asset tabs manager -------------------------------------------------------------------------------------------
     //Select tab buttons
@@ -734,35 +716,7 @@
             envButtonLight.isVisible = false;
         }
     });
-    
-    // Create a dynamic array of no fixed size to hold the thumbnails
-    //let thumbnails = [];
-
-    
-
-    //let envThumbnailStack = advancedTexture.getControlByName("EnvThumbnailStack");
-    
-    //let thumbnail1 = advancedTexture.getControlByName("ThumbNail");    
-   // let thumbnail2 = thumbnail1.clone();
-   
-    //envThumbnailStack.addControl(thumbNail2);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+       
 
     let cancelEnvButton = advancedTexture.getControlByName("cancelEnvButton");
     cancelEnvButton.onPointerUpObservable.add(function () {       
@@ -778,8 +732,16 @@
     let applyEnvButtonLight = advancedTexture.getControlByName("applyEnvButtonLight");
 
     applyEnvButton.onPointerUpObservable.add(function () {
-        //Set this selection as the environment map background 
         
+        //Set this selection as the environment map background         
+        setEnvMap(
+        selectedEnvSrc,
+        skyMat,
+        true,
+        false,
+        skySphere
+    );
+
         if (!envWindow.isVisible) {
             envWindow.isVisible = true;
             envButtonLight.isVisible = true;
@@ -788,36 +750,13 @@
             envWindow.isVisible = false;
             envButtonLight.isVisible = false;
         }
-        
-       
+               
     });
 
-    applyEnvButton.onPointerEnterObservable.add(function () {       
-            applyEnvButtonLight.isVisible = true;        
-    });
-
-    applyEnvButton.onPointerOutObservable.add(function () {       
-            applyEnvButtonLight.isVisible = false;       
-    });
-
-    let numberOfThumbNails = loadedGUI.getControlByName("ThumbnailStack").getDescendants(true).length;
+    applyEnvButton.onPointerEnterObservable.add(function () {applyEnvButtonLight.isVisible = true;});
+    applyEnvButton.onPointerOutObservable.add(function () {applyEnvButtonLight.isVisible = false;});         
        
     //-------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     let cameraEnvButton = advancedTexture.getControlByName("cameraEnvButton");
     let cameraEnvButtonLight = advancedTexture.getControlByName("cameraEnvButtonLight");
