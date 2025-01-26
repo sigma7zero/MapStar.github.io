@@ -1056,10 +1056,69 @@
     helpButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("illuminateHelpButton").isVisible = true });
     helpButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("illuminateHelpButton").isVisible = false });
 
+    
+    let aboutWindow = advancedTexture.getControlByName("AboutWindow");
     let aboutButton = advancedTexture.getControlByName("ButtonAbout");
-    aboutButton.onPointerUpObservable.add(function () { alert("ButtonAbout Pressed!...."); });
-    aboutButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("illuminateAboutButton").isVisible = true });
-    aboutButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("illuminateAboutButton").isVisible = false });
+
+    let aboutWinOKButton = advancedTexture.getControlByName("AboutWinOKButton");
+
+    let aboutWinOKButtonLight = advancedTexture.getControlByName("AboutWinOKButtonLight");
+
+    let illuminateAboutButton = advancedTexture.getControlByName("illuminateAboutButton");
+    
+    illuminateAboutButton.isVisible = aboutWindow.isVisible;
+
+    aboutButton.onPointerUpObservable.add(function () {
+        if (!aboutWindow.isVisible) {
+            aboutWindow.isVisible = true;
+            illuminateAboutButton.isVisible = true;
+        }
+        else {
+            aboutWindow.isVisible = false;
+            illuminateAboutButton.isVisible = false;
+        }
+    });
+
+    aboutButton.onPointerEnterObservable.add(function () {
+        if (!aboutWindow.isVisible) {
+            illuminateAboutButton.isVisible = true;
+        }
+    });
+
+    aboutButton.onPointerOutObservable.add(function () {
+        if (!aboutWindow.isVisible) {
+            illuminateAboutButton.isVisible = false;
+        }
+    });
+
+
+
+
+    aboutWinOKButton.onPointerUpObservable.add(function () {
+        if (!aboutWindow.isVisible) {
+            aboutWindow.isVisible = true;
+            aboutWinOKButtonLight.isVisible = true;
+        }
+        else {
+            aboutWindow.isVisible = false;
+            aboutWinOKButtonLight.isVisible = false;
+            illuminateAboutButton.isVisible = false;
+        }
+    });
+
+    aboutWinOKButton.onPointerEnterObservable.add(function () {
+        //if (!aboutWindow.isVisible) {
+            aboutWinOKButtonLight.isVisible = true;
+        //}
+    });
+
+    aboutWinOKButton.onPointerOutObservable.add(function () {
+        //if (!aboutWindow.isVisible) {
+            aboutWinOKButtonLight.isVisible = false;            
+        //}
+    });
+
+
 
     let donateButton = advancedTexture.getControlByName("ButtonDonate");
     donateButton.onPointerUpObservable.add(function () { alert("ButtonDonate Pressed!...."); });
