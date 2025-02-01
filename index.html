@@ -1061,11 +1061,57 @@
     multiplayerButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("illuminateMultiplayerButton").isVisible = true });
     multiplayerButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("illuminateMultiplayerButton").isVisible = false });
 
-    let settingsButton = advancedTexture.getControlByName("ButtonSettings");
-    settingsButton.onPointerUpObservable.add(function () { alert("ButtonSettings Pressed!...."); });
-    settingsButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("illuminateSettingsButton").isVisible = true });
-    settingsButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("illuminateSettingsButton").isVisible = false });
 
+
+
+
+    let settingsWindow = advancedTexture.getControlByName("Settings");
+    let settingsButton = advancedTexture.getControlByName("ButtonSettings");
+    settingsWindow.isVisible = false;        
+    
+    
+
+    envButton.onPointerEnterObservable.add(function () {
+        if (!envWindow.isVisible) {
+            envButtonLight.isVisible = true;
+        }
+    });
+
+    envButton.onPointerOutObservable.add(function () {
+        if (!envWindow.isVisible) {
+            envButtonLight.isVisible = false;
+        }
+    });
+
+
+
+    settingsButton.onPointerUpObservable.add(function () { 
+        if (!settingsWindow.isVisible) {
+            settingsWindow.isVisible = true;
+            advancedTexture.getControlByName("illuminateSettingsButton").isVisible = true;
+        }
+        else {
+            settingsWindow.isVisible = false;
+            advancedTexture.getControlByName("illuminateSettingsButton").isVisible = false;
+        }
+    });
+
+    settingsButton.onPointerEnterObservable.add(function () { 
+        if (!settingsWindow.isVisible) {
+            advancedTexture.getControlByName("illuminateSettingsButton").isVisible = true;
+        }
+    });    
+    
+    settingsButton.onPointerOutObservable.add(function () { 
+        if (!settingsWindow.isVisible) {
+            advancedTexture.getControlByName("illuminateSettingsButton").isVisible = false;
+        }        
+    });
+    
+
+
+
+    
     let playButton = advancedTexture.getControlByName("ButtonPlay");
     playButton.onPointerUpObservable.add(function () { alert("ButtonPlay Pressed!...."); });
     playButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("illuminatePlayButton").isVisible = true });
