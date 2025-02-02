@@ -146,10 +146,11 @@
 
     let ground = BABYLON.MeshBuilder.CreateGround("ground",{
         height: 10,
-        width: 10, 
-        subdivisions: 10
+        width: 10,         
+        subdivisions: 10,
+        updatable: true
     }
-    , scene);
+    , scene, true);
 
     ground.material = grid;
     //ground.receiveShadows = true;    
@@ -1064,27 +1065,11 @@
 
 
 
-
+    // Settings Window ----------------------------------------------------------------------------------------------------
     let settingsWindow = advancedTexture.getControlByName("Settings");
     let settingsButton = advancedTexture.getControlByName("ButtonSettings");
-    settingsWindow.isVisible = false;        
+    settingsWindow.isVisible = false;    
     
-    
-
-    envButton.onPointerEnterObservable.add(function () {
-        if (!envWindow.isVisible) {
-            envButtonLight.isVisible = true;
-        }
-    });
-
-    envButton.onPointerOutObservable.add(function () {
-        if (!envWindow.isVisible) {
-            envButtonLight.isVisible = false;
-        }
-    });
-
-
-
     settingsButton.onPointerUpObservable.add(function () { 
         if (!settingsWindow.isVisible) {
             settingsWindow.isVisible = true;
@@ -1108,10 +1093,86 @@
         }        
     });
     
+    let applySettingsButton = advancedTexture.getControlByName("applySettingsButton");
 
+    applySettingsButton.onPointerUpObservable.add(function () {
 
+        //Save settings to the map file          
+        settingsWindow.isVisible = false;
+        advancedTexture.getControlByName("illuminateSettingsButton").isVisible = false;
 
+    });
+
+    applySettingsButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("applySettingsButtonLight").isVisible = true });    
+    applySettingsButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("applySettingsButtonLight").isVisible = false });
+
+    let cancelSettingsButton = advancedTexture.getControlByName("cancelSettingsButton");    
     
+    cancelSettingsButton.onPointerUpObservable.add(function () {       
+	settingsWindow.isVisible = false; 
+    advancedTexture.getControlByName("illuminateSettingsButton").isVisible = false;        
+	console.log("EVENT => cancelSettings Button was pressed ...!");
+    });
+
+    cancelSettingsButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("cancelSettingsButtonLight").isVisible = true });    
+    cancelSettingsButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("cancelSettingsButtonLight").isVisible = false });
+
+    let ShowGridCheckbox = advancedTexture.getControlByName("ShowGridCheckbox");
+    ShowGridCheckbox.checked = ground.isVisible;
+    ShowGridCheckbox.onPointerUpObservable.add(function () {
+        
+        if(ShowGridCheckbox.checked) { 
+            ShowGridCheckbox.checked = false;
+            ground.isVisible = false;
+        }else
+        {
+            ShowGridCheckbox.checked = true;
+            ground.isVisible = true;
+        }  
+    });  
+    
+    let GridSizeSlider = advancedTexture.getControlByName("GridSizeSlider");
+    let GridSizeOutputLabel = advancedTexture.getControlByName("GridSizeOutputLabel");
+    GridSizeOutputLabel.text = 10;
+    GridSizeSlider.minimum = 0;
+    GridSizeSlider.maximum = 50;
+    GridSizeSlider.value = 10;
+    GridSizeSlider.onValueChangedObservable.add(function(value) {
+        GridSizeOutputLabel.text = Math.round(value);        
+        ground.scaling.x = Math.round(value);
+        ground.scaling.y = Math.round(value);
+        ground.scaling.z = Math.round(value);
+
+    });
+
+    let GridOpacitySlider = advancedTexture.getControlByName("GridOpacitySlider");
+    let GridOpacityOutputLabel = advancedTexture.getControlByName("GridOpacityOutputLabel");
+
+    GridOpacitySlider.onValueChangedObservable.add(function(value) {
+        GridOpacityOutputLabel.text = value.toFixed(2); 
+        grid.opacity = value.toFixed(2);
+    });
+
+    let GridRezSlider = advancedTexture.getControlByName("GridRezSlider");
+    let GridRezOutputLabel = advancedTexture.getControlByName("GridRezOutputLabel");
+
+    GridRezSlider.onValueChangedObservable.add(function(value) {
+        GridRezOutputLabel.text = value.toFixed(4);
+        grid.gridRatio = value;
+    });
+
+    let GridColorPicker = advancedTexture.getControlByName("GridColorPicker");
+
+    GridColorPicker.onValueChangedObservable.add(function(value) {
+        grid.lineColor = value;
+    });
+
+
+
+
+
+
+    //---------------------------------------------------------------------------------------------------------------------------------------------------
     let playButton = advancedTexture.getControlByName("ButtonPlay");
     playButton.onPointerUpObservable.add(function () { alert("ButtonPlay Pressed!...."); });
     playButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("illuminatePlayButton").isVisible = true });
