@@ -73,7 +73,7 @@
     scene.clearColor = new BABYLON.Color3(0, 0, 0).toLinearSpace();
 
     // Sky sphere
-    var skySphere = BABYLON.MeshBuilder.CreateSphere("sphere", { diameter: 1024, segments: 32 }, scene);
+    var skySphere = BABYLON.MeshBuilder.CreateSphere("Sky", { diameter: 1024, segments: 32 }, scene);
     skySphere.flipFaces(true);
     skySphere.position.x = 0;
     skySphere.position.y = 0;
@@ -144,7 +144,7 @@
     grid.opacity = 0.8;
     grid.backFaceCulling = false;
 
-    let ground = BABYLON.MeshBuilder.CreateGround("ground",{
+    let ground = BABYLON.MeshBuilder.CreateGround("grid",{
         height: 10,
         width: 10,         
         subdivisions: 10,
@@ -152,10 +152,10 @@
     }
     , scene, true);
 
-    ground.material = grid;
-    //ground.receiveShadows = true;    
+    ground.material = grid;       
     plane.receiveShadows = true;
-    
+     
+
     // LOADER
     engine.displayLoadingUI();
 
@@ -1167,7 +1167,20 @@
         grid.lineColor = value;
     });
 
+    // Pickable objects
+    let TextblockMain = advancedTexture.getControlByName("TextblockMain");    
+    TextblockMain.text = "Click on objects";
+    TextblockMain.color = "white";
 
+    scene.onPointerObservable.add((pointerInfo) => {
+        if (pointerInfo.type === BABYLON.PointerEventTypes.POINTERDOWN){
+        selectedMesh = pointerInfo.pickInfo.pickedMesh;
+        if(selectedMesh) {
+            TextblockMain.text = "Selected Mesh: " + selectedMesh.name;
+            console.log("Selected Mesh: " + selectedMesh.name);
+        }
+        }
+    });
 
 
 
