@@ -51,7 +51,7 @@
         <div id="canvasZone"><canvas id="renderCanvas"></canvas></div>
         <script>
                     var canvas = document.getElementById("renderCanvas");
-
+                    canvas.focus();
                     var startRenderLoop = function (engine, canvas) {
                         
                         engine.runRenderLoop(function () {
@@ -73,7 +73,7 @@
     scene.clearColor = new BABYLON.Color3(0, 0, 0).toLinearSpace();
 
     // Sky sphere
-    var skySphere = BABYLON.MeshBuilder.CreateSphere("Sky", { diameter: 1024, segments: 32 }, scene);
+    var skySphere = BABYLON.MeshBuilder.CreateSphere("sky", { diameter: 1024, segments: 32 }, scene);
     skySphere.flipFaces(true);
     skySphere.position.x = 0;
     skySphere.position.y = 0;
@@ -308,9 +308,7 @@
     envThumbnailStack.children[0].isVisible = false;
     envThumbnailStack.children[1].color = selectColor;
 
-    let sizeOfStack = envThumbnailStack.children.length;
-    //console.log("Size Of Thumbnail Stack:" + sizeOfStack);
-    //console.log("MANIFEST: \n" + envManifest);
+    let sizeOfStack = envThumbnailStack.children.length;   
 
     function resetEnvSelector(){
         for(var n = 0; n < sizeOfStack; n++){
@@ -366,15 +364,13 @@
     let selectMaterialMarkerLine = advancedTexture.getControlByName("MaterialsMarker");
     let selectTextureMarkerLine = advancedTexture.getControlByName("TextureMarker");
     let selectSoundMarkerLine = advancedTexture.getControlByName("SoundMarker");
-      
-    
+       
     function resetMapThumbnails(){
         mapsThumb_1.color = "black";
         mapsThumb_2.color = "black";
         mapsThumb_3.color = "black";
     }
    
-
     function resetMarkerDots(){
         selectMarkerDotMaps.isVisible = false;
         selectMarkerDotModels.isVisible = false;
@@ -594,8 +590,8 @@
     newMapBackButton.onPointerUpObservable.add(function () {
         if (newMapFileWindow.isVisible){newMapFileWindow.isVisible = false;}
     });
-    newMapBackButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("cancelNewMapModal").isVisible = true });    
-    newMapBackButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("cancelNewMapModal").isVisible = false }); 
+    newMapBackButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("illuminateBackButton").isVisible = true });    
+    newMapBackButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("illuminateBackButton").isVisible = false }); 
     
     //Helper
     async function SaveTheFile(_data, _name) {        
@@ -655,9 +651,8 @@
     });
     newMapApplyButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("applyNewMapLightModal").isVisible = true });    
     newMapApplyButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("applyNewMapLightModal").isVisible = false }); 
-
-
-
+    
+    // Open existing project from file on users drive ------------------------------------------------------------------------------------------
     let openProjectWindow = advancedTexture.getControlByName("OpenWindow");    
     let openButton = advancedTexture.getControlByName("ButtonOpen");    
     let cancelOpenButton = advancedTexture.getControlByName("cancelOpenButton");	    
@@ -676,14 +671,6 @@
         
     openButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("illuminateOpenButton").isVisible = true });
     openButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("illuminateOpenButton").isVisible = false });
-
-
-	    
-
-
-
-
-
 	    
     let saveButton = advancedTexture.getControlByName("ButtonSave");
     saveButton.onPointerUpObservable.add(function () { 
@@ -704,8 +691,6 @@
     exportButton.onPointerUpObservable.add(function () { alert("ButtonExport Pressed!...."); });
     exportButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("illuminateExportButton").isVisible = true });
     exportButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("illuminateExportButton").isVisible = false });
-
-
 
     
 	// Environment (Sky) selection window ----------------------------------------------------------------------------------------------------   
@@ -846,7 +831,6 @@
     sm_cameraButton.onPointerOutObservable.add(function () {
         sm_cameraButtonLight.isVisible = false;
     });
-
     
     // Cross platform fullscreen toggle
     const canvasParent = document.getElementById("canvasZone");
@@ -1167,21 +1151,82 @@
         grid.lineColor = value;
     });
 
-    // Pickable objects
+    // Pickable objects --------------------------------------------------------------
     let TextblockMain = advancedTexture.getControlByName("TextblockMain");    
-    TextblockMain.text = "Click on objects";
+    TextblockMain.text = "CTRL + Click on objects";
+    //TextblockMain.color = "#50B1FFFF";
     TextblockMain.color = "white";
+
+    //Highlight picked objects
+    let highLighter = new BABYLON.HighlightLayer("highLightLayer1", scene); 
+    
+    const highlightColor = new BABYLON.Color3(0, 255, 13);
+    
+    let selectedMesh = null;
+
+    let previousSelections = [];    
+
+    let notSelectable = ['sky', 'grid'];    
 
     scene.onPointerObservable.add((pointerInfo) => {
         if (pointerInfo.type === BABYLON.PointerEventTypes.POINTERDOWN){
-        selectedMesh = pointerInfo.pickInfo.pickedMesh;
-        if(selectedMesh) {
-            TextblockMain.text = "Selected Mesh: " + selectedMesh.name;
-            console.log("Selected Mesh: " + selectedMesh.name);
-        }
+        
+            //Only select objects if the CTRL key is held down
+            if (event.ctrlKey){
+                selectedMesh = pointerInfo.pickInfo.pickedMesh;                
+                var skipSelection = false;
+
+                //Some objects can't be selected (highlighted)
+                notSelectable.forEach(element => {
+                    if (element == selectedMesh.name) {
+                    console.log(element + " is not selectable");                    
+                    skipSelection = true;
+                    }
+                });
+                
+                // Don't highlight object if it's listed as NOT SELECTABLE 
+                if (!skipSelection){                                   
+
+                    if (selectedMesh){
+
+                        //If it is already selected? De-select and remove from the array
+                        //Search array
+                        var index = previousSelections.indexOf(selectedMesh);
+                        if (index != -1){                        
+                            highLighter.removeMesh(selectedMesh);                            
+                            //selectedMesh = previousSelections[index - 1];
+                            //selectedMesh = previousSelections[index];
+                            previousSelections.splice(index, 1);
+                            var _length = previousSelections.length;
+                            if (_length){
+                                TextblockMain.text = "Selected Mesh: " + previousSelections[previousSelections.length - 1].name;
+                            }
+                            else{
+                                TextblockMain.text = "Selected Mesh: None";
+                            }
+                        }
+                        else{
+                            highLighter.addMesh(selectedMesh, highlightColor);
+                            previousSelections.push(selectedMesh);
+                            TextblockMain.text = "Selected Mesh: " + selectedMesh.name;
+                        }                        
+                    }
+                }    
+            }         
+        }          
+    });
+    
+
+    scene.onKeyboardObservable.add((kbInfo) => {
+        if (kbInfo.type == BABYLON.KeyboardEventTypes.KEYDOWN){
+            if (kbInfo.event.key == "Enter"){
+                console.log("Contents of selected Meshes Array : \n");
+                previousSelections.forEach(element => {
+                    console.log(element + "\n");
+                })
+            }
         }
     });
-
 
 
 
