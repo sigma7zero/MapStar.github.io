@@ -85,9 +85,10 @@
     let skyMat = new BABYLON.StandardMaterial("skyMat", scene);
     
     function setEnvMap(src, mat, blumin, bFaceCull, skyObj){
-        mat.diffuseTexture = new BABYLON.Texture(src, scene);
-        mat.specularTexture = new BABYLON.Texture(src, scene);
-        mat.emissiveTexture = new BABYLON.Texture(src, scene);
+        var tex = new BABYLON.Texture(src, scene);
+        mat.diffuseTexture  = tex;
+        mat.specularTexture = tex;
+        mat.emissiveTexture = tex;
         mat.useEmissiveAsIllumination = blumin;
         mat.backFaceCulling = bFaceCull;
         skyObj.material = mat;
