@@ -791,35 +791,45 @@
             lightingEnvButtonLight.isVisible = false;        
     });
 
+    // Scene cameras -------------------------------------------------------------------
     let camToggle = false;
     let sm_cameraButton = advancedTexture.getControlByName("sm_cameraButton");
     let sm_cameraButtonLight = advancedTexture.getControlByName("sm_cameraButtonLight");
     let sm_cameraButton_cameraImage = advancedTexture.getControlByName("ImageCamera");
     let sm_cameraButton_gamePadImage = advancedTexture.getControlByName("ImageGamePad");
     let textblockCamType = advancedTexture.getControlByName("TextblockCamType");
-    textblockCamType.text = "First Person Camera";
+    
+    // Start mode is Arc Rotate Camera - (GamePad icon visible)
+    textblockCamType.text = "Arc Rotate Camera";
+    sm_cameraButton_cameraImage.isVisible = false;
+    sm_cameraButton_gamePadImage.isVisible = true;    
+    scene.activeCamera = arcRotateCamera;
+    scene.activeCamera.attachControl(canvas, true);   
     sm_cameraButtonLight.isVisible = false;
 
     sm_cameraButton.onPointerUpObservable.add(function () {         
         
         if (!camToggle) {
             camToggle = true;   
-            sm_cameraButton_cameraImage.isVisible = false;
-            sm_cameraButton_gamePadImage.isVisible = true;
-            textblockCamType.text = "Arc Rotate Camera";
-
-            scene.activeCamera.detachControl(canvas);
-            scene.activeCamera = arcRotateCamera;
+            
+            // Change to First Person Camera Mode - (Camera Icon Visible)
+            sm_cameraButton_cameraImage.isVisible = true;
+            sm_cameraButton_gamePadImage.isVisible = false;           
+            textblockCamType.text = "First Person Camera";
+            scene.activeCamera.detachControl(canvas);            
+            scene.activeCamera = gameCamera;
             scene.activeCamera.attachControl(canvas, true);
 
         }
         else {
             camToggle = false;
-            sm_cameraButton_cameraImage.isVisible = true;
-            sm_cameraButton_gamePadImage.isVisible = false;
-            textblockCamType.text = "First Person Camera";
+
+             // Change to Arc Rotate Camera Mode - (GamePad icon visible)
+            sm_cameraButton_cameraImage.isVisible = false;
+            sm_cameraButton_gamePadImage.isVisible = true;            
             scene.activeCamera.detachControl(canvas);
-            scene.activeCamera = gameCamera;
+            textblockCamType.text = "Arc Rotate Camera";           
+            scene.activeCamera = arcRotateCamera;
             scene.activeCamera.attachControl(canvas, true);
         }       
 
