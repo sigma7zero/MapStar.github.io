@@ -72,6 +72,8 @@
 
     scene.clearColor = new BABYLON.Color3(0, 0, 0).toLinearSpace();
 
+    let collection = new BABYLON.TransformNode("Collection");
+
     // Sky sphere
     var skySphere = BABYLON.MeshBuilder.CreateSphere("sky", { diameter: 1024, segments: 32 }, scene);
     skySphere.flipFaces(true);
@@ -80,6 +82,7 @@
     skySphere.position.z = 0;
     skySphere.rotate(BABYLON.Axis.X, BABYLON.Tools.ToRadians(180), BABYLON.Space.LOCAL);
     skySphere.receiveShadows = false;
+    skySphere.parent = collection;
 
     // Env sky material
     let skyMat = new BABYLON.StandardMaterial("skyMat", scene);
@@ -102,19 +105,22 @@
         skySphere
     );
 
-
     // Cameras  
     // 1  
     var gameCamera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(0, 2, -10), scene);
     gameCamera.setTarget(BABYLON.Vector3.Zero());
     gameCamera.attachControl(canvas, true);
+    gameCamera.parent = collection;
+
     // 2
-    var arcRotateCamera = new BABYLON.ArcRotateCamera("ArcRotateCamera", 0, 0, 10, new BABYLON.Vector3(0, 0, 0), scene);
-    arcRotateCamera.setPosition(new BABYLON.Vector3(0, 2, -10));
+    var arcRotateCamera = new BABYLON.ArcRotateCamera("ArcRotateCamera", 0, 2, 20, new BABYLON.Vector3(0, 0, 0), scene);
+    arcRotateCamera.setPosition(new BABYLON.Vector3(12, 12, -12));
+    arcRotateCamera.parent = collection;
 
     // Create a light source
     var light = new BABYLON.DirectionalLight("DirectLight1", new BABYLON.Vector3(1, -2, 1), scene);
-    light.position = new BABYLON.Vector3(-20, 40, -20);
+    light.position = new BABYLON.Vector3(-20, 20, -20);
+    light.parent = collection;
 
     // Default intensity is 1. Let's dim the light a small amount
     light.intensity = 0.6;
@@ -125,13 +131,14 @@
 
     // Move the sphere upward 1/2 its height
     sphere.position.y = 1; 
+    sphere.parent = collection;
 
     // Add plane
     let plane = BABYLON.MeshBuilder.CreatePlane("plane", { height: 5, width: 5}, scene);
     plane.rotation.x = BABYLON.Tools.ToRadians(90);
     plane.position.y = 0.1;
     plane.backFaceCulling = false;
-     
+    plane.parent = collection;
     
     // Shadows
     var shadowGenerator = new BABYLON.ShadowGenerator(1024, light);
@@ -153,7 +160,9 @@
     }
     , scene, true);
 
-    ground.material = grid;       
+    ground.material = grid; 
+    ground.parent = collection;
+
     plane.receiveShadows = true;
      
 
@@ -843,6 +852,34 @@
         sm_cameraButtonLight.isVisible = false;
     });
     
+
+
+    // Toggle Inspector Panel
+    let smInspectorButton = advancedTexture.getControlByName("smInspectorButton");
+    let inspectorPanelToggle = false;
+    smInspectorButton.onPointerUpObservable.add(function () {
+        
+        if (!inspectorPanelToggle) {
+            advancedTexture.getControlByName("smInspectorButtonLight").isVisible = true;
+            scene.debugLayer.show({embedMode: true});
+            inspectorPanelToggle = true;
+        }
+        else{
+            advancedTexture.getControlByName("smInspectorButtonLight").isVisible = false;
+            scene.debugLayer.hide();
+            inspectorPanelToggle = false;
+        }
+    });
+
+    smInspectorButton.onPointerEnterObservable.add(function () {
+        advancedTexture.getControlByName("smInspectorButtonLight").isVisible = true;
+    });
+
+    smInspectorButton.onPointerOutObservable.add(function () {
+        advancedTexture.getControlByName("smInspectorButtonLight").isVisible = false;
+    });
+
+
     // Cross platform fullscreen toggle
     const canvasParent = document.getElementById("canvasZone");
     canvasParent.style.position = "relative";
@@ -1057,9 +1094,6 @@
     multiplayerButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("illuminateMultiplayerButton").isVisible = true });
     multiplayerButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("illuminateMultiplayerButton").isVisible = false });
 
-
-
-
     // Settings Window ----------------------------------------------------------------------------------------------------
     let settingsWindow = advancedTexture.getControlByName("Settings");
     let settingsButton = advancedTexture.getControlByName("ButtonSettings");
@@ -1111,7 +1145,8 @@
 
     cancelSettingsButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("cancelSettingsButtonLight").isVisible = true });    
     cancelSettingsButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("cancelSettingsButtonLight").isVisible = false });
-
+    
+    //Grid settings    
     let ShowGridCheckbox = advancedTexture.getControlByName("ShowGridCheckbox");
     ShowGridCheckbox.checked = ground.isVisible;
     ShowGridCheckbox.onPointerUpObservable.add(function () {
@@ -1162,10 +1197,10 @@
         grid.lineColor = value;
     });
 
-    // Pickable objects --------------------------------------------------------------
+    // Pickable object system --------------------------------------------------------------       
+    
     let TextblockMain = advancedTexture.getControlByName("TextblockMain");    
-    TextblockMain.text = "CTRL + Click on objects";
-    //TextblockMain.color = "#50B1FFFF";
+    TextblockMain.text = "CTRL + Click on objects";    
     TextblockMain.color = "white";
 
     //Highlight picked objects
@@ -1205,9 +1240,14 @@
                         var index = previousSelections.indexOf(selectedMesh);
                         if (index != -1){                        
                             highLighter.removeMesh(selectedMesh);                            
-                            //selectedMesh = previousSelections[index - 1];
-                            //selectedMesh = previousSelections[index];
-                            previousSelections.splice(index, 1);
+                            
+                            previousSelections.splice(index, 1);                            
+                            
+                            // Update selection in Inspector Scene graph
+                            //scene.debugLayer.select(previousSelections[previousSelections.length - 1]);
+                            scene.debugLayer.select(collection);
+                            
+
                             var _length = previousSelections.length;
                             if (_length){
                                 TextblockMain.text = "Selected Mesh: " + previousSelections[previousSelections.length - 1].name;
@@ -1219,6 +1259,10 @@
                         else{
                             highLighter.addMesh(selectedMesh, highlightColor);
                             previousSelections.push(selectedMesh);
+                            
+                            // Update selection in Inspector Scene graph
+                            scene.debugLayer.select(selectedMesh);
+                            
                             TextblockMain.text = "Selected Mesh: " + selectedMesh.name;
                         }                        
                     }
@@ -1251,7 +1295,6 @@
     helpButton.onPointerUpObservable.add(function () { alert("ButtonHelp Pressed!...."); });
     helpButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("illuminateHelpButton").isVisible = true });
     helpButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("illuminateHelpButton").isVisible = false });
-
     
     let aboutWindow = advancedTexture.getControlByName("AboutWindow");
     let aboutButton = advancedTexture.getControlByName("ButtonAbout");
@@ -1287,9 +1330,6 @@
         }
     });
 
-
-
-
     aboutWinOKButton.onPointerUpObservable.add(function () {
         if (!aboutWindow.isVisible) {
             aboutWindow.isVisible = true;
@@ -1314,12 +1354,14 @@
         //}
     });
 
-
-
     let donateButton = advancedTexture.getControlByName("ButtonDonate");
     donateButton.onPointerUpObservable.add(function () { alert("ButtonDonate Pressed!...."); });
     donateButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("illuminateDonateButton").isVisible = true });
     donateButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("illuminateDonateButton").isVisible = false });
+
+
+    
+
 
     // Get FPS and other stats
     var textblockFPS = advancedTexture.getControlByName("TextblockFPS");
