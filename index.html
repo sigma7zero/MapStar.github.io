@@ -1190,77 +1190,46 @@
     // Pickable object system --------------------------------------------------------------       
     
     let TextblockMain = advancedTexture.getControlByName("TextblockMain");    
-    TextblockMain.text = "CTRL + Click on objects";    
-    TextblockMain.color = "white";
+    TextblockMain.text = ""; 
+
+    // Gizmos
+    let utilityLayer = new BABYLON.UtilityLayerRenderer(scene);
+    let positionGizmo = new BABYLON.PositionGizmo(utilityLayer);
 
     //Highlight picked objects
-    let highLighter = new BABYLON.HighlightLayer("highLightLayer1", scene); 
-    
+    let highLighter = new BABYLON.HighlightLayer("highLightLayer1", scene);     
     const highlightColor = new BABYLON.Color3(0, 255, 13);
     
-    let selectedMesh = null;
-
-    let previousSelections = [];    
-
-    let notSelectable = ['sky', 'grid'];    
-
+    let pickMesh = null;
+    let Selections = [];    
+   
     scene.onPointerObservable.add((pointerInfo) => {
         if (pointerInfo.type === BABYLON.PointerEventTypes.POINTERDOWN){
-        
-            //Only select objects if the CTRL key is held down
-            if (event.ctrlKey){
-                selectedMesh = pointerInfo.pickInfo.pickedMesh;                
-                var skipSelection = false;
-
-                //Some objects can't be selected (highlighted)
-                notSelectable.forEach(element => {
-                    if (element == selectedMesh.name) {
-                    console.log(element + " is not selectable");                    
-                    skipSelection = true;
-                    }
-                });
+            pickMesh = pointerInfo.pickInfo.pickedMesh;
+            console.log("picked: " + pickMesh.name);
+            if (pickMesh.name == 'sky') {                
+                TextblockMain.text = "";
+                positionGizmo.attachedMesh = null;
                 
-                // Don't highlight object if it's listed as NOT SELECTABLE 
-                if (!skipSelection){                                   
-
-                    if (selectedMesh){
-
-                        //If it is already selected? De-select and remove from the array
-                        //Search array
-                        var index = previousSelections.indexOf(selectedMesh);
-                        if (index != -1){                        
-                            highLighter.removeMesh(selectedMesh);                            
-                            
-                            previousSelections.splice(index, 1);                            
-                            
-                            // Update selection in Inspector Scene graph
-                            //scene.debugLayer.select(previousSelections[previousSelections.length - 1]);
-                            scene.debugLayer.select(collection);
-                            
-
-                            var _length = previousSelections.length;
-                            if (_length){
-                                TextblockMain.text = "Selected Mesh: " + previousSelections[previousSelections.length - 1].name;
-                            }
-                            else{
-                                TextblockMain.text = "Selected Mesh: None";
-                            }
-                        }
-                        else{
-                            highLighter.addMesh(selectedMesh, highlightColor);
-                            previousSelections.push(selectedMesh);
-                            
-                            // Update selection in Inspector Scene graph
-                            scene.debugLayer.select(selectedMesh);
-                            
-                            TextblockMain.text = "Selected Mesh: " + selectedMesh.name;
-                        }                        
-                    }
-                }    
-            }         
-        }          
+            }
+            else
+            {
+                TextblockMain.text = pickMesh.name; 
+                scene.debugLayer.select(pickMesh);
+                positionGizmo.attachedMesh = pickMesh;
+                positionGizmo.updateGizmoRotationToMatchAttachedMesh = false;
+                positionGizmo.updateGizmoPositionToMatchAttachedMesh = true;
+            }
+        }        
     });
     
+
+
+
+
+
+
+
 
     scene.onKeyboardObservable.add((kbInfo) => {
         if (kbInfo.type == BABYLON.KeyboardEventTypes.KEYDOWN){
