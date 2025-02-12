@@ -145,7 +145,6 @@
     shadowGenerator.addShadowCaster(sphere);
     shadowGenerator.usePoissonSampling = true;
 
-
     // add a snappable grid system here -------------------
     let grid = new BABYLON.GridMaterial("grid", scene);
     grid.gridRatio = 0.1;
@@ -252,8 +251,6 @@
         instrumentation.captureAnimationsTime = true;
     }
     
-   
-
     // Environment Window - map selection system ------------------------------------------------------------------
     let selectColor = "rgba(0, 255, 13, 255)";
     let envWindow = advancedTexture.getControlByName("envWindow");    
@@ -311,9 +308,7 @@
         return _names;
     };
     let envNames = getEnvFileNames();
-    //console.log("envNames [] => \n" + envNames);
-
-
+   
     // hide the first thumbnail, just use clones from this point
     envThumbnailStack.children[0].isVisible = false;
     envThumbnailStack.children[1].color = selectColor;
@@ -326,12 +321,10 @@
         };
     };
 
-
     let selectedEnvMap = envThumbnails[0].split("_")[0];
     let envLabelText = advancedTexture.getControlByName("EnvLabelText");
     let selectedEnvSrc = "https://raw.githubusercontent.com/sigma7zero/MapStar/main/Environments/Azure1.jpg";
     envLabelText.text = selectedEnvMap;
-      
         
     for(let i=1; i < sizeOfStack; i++){         
         
@@ -351,8 +344,7 @@
             selectedEnvSrc = envRepo.split("fileManifest.txt")[0] + selectedEnvMap + ".jpg"
         });
     };   
-    
-
+ 
     //Asset tabs manager -------------------------------------------------------------------------------------------
     //Select tab buttons
     let tab_MapsButton = advancedTexture.getControlByName("tab_Maps");
@@ -852,8 +844,6 @@
         sm_cameraButtonLight.isVisible = false;
     });
     
-
-
     // Toggle Inspector Panel
     let smInspectorButton = advancedTexture.getControlByName("smInspectorButton");
     let inspectorPanelToggle = false;
@@ -879,7 +869,6 @@
         advancedTexture.getControlByName("smInspectorButtonLight").isVisible = false;
     });
 
-
     // Cross platform fullscreen toggle
     const canvasParent = document.getElementById("canvasZone");
     canvasParent.style.position = "relative";
@@ -893,7 +882,6 @@
     smFullScreenButtonLight.isVisible = false;
     smFullScreenButtonMaxIcon.isVisible = true;
     smFullScreenButtonMinIcon.isVisible = false;     
-        
 
     smFullscreenButton.onPointerUpObservable.add(function () {
         
@@ -916,7 +904,6 @@
             CreatePanelEndPoint.isVisible = true;
         }       
     });
-
     
     // If the user presses down the Esc key on the physical keyboard, gui must reflect the change
     function fullscreenChangedHandler(evt){
@@ -1054,7 +1041,6 @@
     sm_resetButton.onPointerOutObservable.add(function () {
         sm_resetButtonLight.isVisible = false;
     });
-
 
     let assetsButton = advancedTexture.getControlByName("assetsButton");
     let assetsButtonLight = advancedTexture.getControlByName("assetsButtonLight");
