@@ -862,11 +862,15 @@
     });
 
     smInspectorButton.onPointerEnterObservable.add(function () {
-        advancedTexture.getControlByName("smInspectorButtonLight").isVisible = true;
+            if (!inspectorPanelToggle){
+                advancedTexture.getControlByName("smInspectorButtonLight").isVisible = true;
+            }           
     });
 
     smInspectorButton.onPointerOutObservable.add(function () {
-        advancedTexture.getControlByName("smInspectorButtonLight").isVisible = false;
+        if (!inspectorPanelToggle){
+            advancedTexture.getControlByName("smInspectorButtonLight").isVisible = false;
+        }
     });
 
     // Cross platform fullscreen toggle
