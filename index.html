@@ -69,9 +69,7 @@
     var createDefaultEngine = function() { return new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true,  disableWebGL2Support: false}); };
     var createScene = async function () {    
     var scene = new BABYLON.Scene(engine);
-
     scene.clearColor = new BABYLON.Color3(0, 0, 0).toLinearSpace();
-
     let collection = new BABYLON.TransformNode("Collection");
 
     // Sky sphere
@@ -84,28 +82,48 @@
     skySphere.receiveShadows = false;
     skySphere.parent = collection;
 
-    // Env sky material
-    let skyMat = new BABYLON.StandardMaterial("skyMat", scene);
-    
-    function setEnvMap(src, mat, blumin, bFaceCull, skyObj){
-        var tex = new BABYLON.Texture(src, scene);
-        mat.diffuseTexture  = tex;
-        mat.specularTexture = tex;
-        mat.emissiveTexture = tex;
-        mat.useEmissiveAsIllumination = blumin;
-        mat.backFaceCulling = bFaceCull;
-        skyObj.material = mat;
+    // Env sky material    
+    let skyMat = null;
+    let skyTex = null;    
+    let blurAmount = 1.0;
+    let brightAmount = 1.0;
+    let enableFX = false;    
+
+    function setEnvMap(src, blumin, bFaceCull, skyObj, FX, blr, bright){
+        skyMat = new BABYLON.PBRMaterial("skyMat", scene);
+        skyTex = new BABYLON.Texture(src, scene);       
+        skyMat.reflectionTexture = skyTex;
+        skyMat.reflectionTexture.coordinatesMode = BABYLON.Texture.FIXED_EQUIRECTANGULAR_MIRRORED_MODE;
+        if (FX) {
+            skyMat.reflectionTexture.lodGenerationScale = 1;
+        }
+        else{
+            skyMat.reflectionTexture.lodGenerationScale = 0;
+        }
+        skyMat.emissiveTexture = skyTex;
+        skyMat.emissiveIntensity = 1;
+        skyMat.disableLighting = true;
+        skyMat.useRadianceOcclusion = false;
+        skyMat.useEmissiveAsIllumination = blumin;
+        skyMat.backFaceCulling = bFaceCull;
+        skyObj.material = skyMat;
+        // BLUR - range 0.5 to 1.0   (need lodGenerationScale = 1 for this hack to work)
+        skyMat.microSurface = blr;
+        // BRIGHTNESS - range 1.0 to 5.0
+        skyTex.level = bright;
     };
     
     setEnvMap(
-        "https://raw.githubusercontent.com/sigma7zero/MapStar/main/Environments/Columbia.jpg",
-        skyMat,
-        true,
+        "https://raw.githubusercontent.com/sigma7zero/MapStar/main/Environments/Columbia.jpg",        
         false,
-        skySphere
+        false,
+        skySphere,
+        enableFX,
+        blurAmount,
+        brightAmount
     );
 
-    // Cameras  
+    // Cameras -----------------------------------------------------------------------------------------------------------
     // 1  
     var gameCamera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(0, 2, -10), scene);
     gameCamera.setTarget(BABYLON.Vector3.Zero());
@@ -171,7 +189,11 @@
     // GUI
     let advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("GUI", true, scene);              
     let loadedGUI = await advancedTexture.parseFromURLAsync("https://raw.githubusercontent.com/sigma7zero/MapStar.github.io/main/guiTexture.json");
-       
+    
+    let checkedFX = advancedTexture.getControlByName("EnableFX");
+    checkedFX.isChecked = false;
+
+
     // HELPERS      
     // Download the scene to the client's machine (Note: Web Safe)
     var objectUrl;
@@ -263,13 +285,37 @@
         request.send(null);
         return request.responseText;       
     }
-       
-    let envManifest = getText(envRepo);
-    //console.log("MANIFEST: \n" + envManifest);
     
-    let envArray = envManifest.split("\n");
-    //console.log("ENVARRAY: " + envArray);
+    // Environment controls ------------------------------------------------------------------
+    let blurSlider = advancedTexture.getControlByName("BlurSlider");
+    let blurOutputLabel = advancedTexture.getControlByName("BlurOutputLabel");
+    let brightnessSlider = advancedTexture.getControlByName("BrightnessSlider");
+    let brightnessOutputLabel = advancedTexture.getControlByName("BrightnessOutputLabel");    
 
+    checkedFX.onIsCheckedChangedObservable.add(function(value) {       
+        skyMat.reflectionTexture.lodGenerationScale = !skyMat.reflectionTexture.lodGenerationScale;
+        enableFX = !enableFX;
+        if (!checkedFX.value){
+            blurSlider.value = 1.0;
+            brightnessSlider.value = 1.0;
+        }
+    });
+
+    blurSlider.onValueChangedObservable.add(function(value) {
+        blurOutputLabel.text = value;        
+        skyMat.microSurface = value;
+        blurAmount = value;        
+    });
+
+    brightnessSlider.onValueChangedObservable.add(function(value) {
+        brightnessOutputLabel.text = value;        
+        skyTex.level = value;        
+        brightAmount = value;
+    });
+
+    // Select environment system -------------------------------------------------------------
+    let envManifest = getText(envRepo);    
+    let envArray = envManifest.split("\n");
     let thumbNail = advancedTexture.getControlByName("ThumbNail");
     let envThumbnailStack = advancedTexture.getControlByName("EnvThumbnailStack");
     let envPreviewImage = advancedTexture.getControlByName("EnvPreviewImage");
@@ -323,7 +369,7 @@
 
     let selectedEnvMap = envThumbnails[0].split("_")[0];
     let envLabelText = advancedTexture.getControlByName("EnvLabelText");
-    let selectedEnvSrc = "https://raw.githubusercontent.com/sigma7zero/MapStar/main/Environments/Azure1.jpg";
+    let selectedEnvSrc = "https://raw.githubusercontent.com/sigma7zero/MapStar/main/Environments/Columbia.jpg";
     envLabelText.text = selectedEnvMap;
         
     for(let i=1; i < sizeOfStack; i++){         
@@ -725,29 +771,47 @@
         }
     });
        
-
     let cancelEnvButton = advancedTexture.getControlByName("cancelEnvButton");
+    
     cancelEnvButton.onPointerUpObservable.add(function () {       
-	envWindow.isVisible = false;
-	envButtonLight.isVisible = false;        
-	console.log("EVENT => cancelEnvButton was pressed ...!");
+	    envWindow.isVisible = false;
+	    envButtonLight.isVisible = false;        
+	    skyMat.reflectionTexture.lodGenerationScale = 0; 
+        blurAmount = 1.0;
+        blurSlider.value = 1.0;
+        brightAmount = 1.0;
+        brightnessSlider.value = 1.0;
+        enableFX = false;
+        checkedFX.isChecked = false;
+        
+        // Reset the environment map settings on cancel                
+        setEnvMap(
+            selectedEnvSrc,       
+            false,
+            false,
+            skySphere,
+            enableFX,
+            blurAmount,
+            brightAmount
+        );
     });
+    
     cancelEnvButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("cancelEnvButtonLight").isVisible = true });    
     cancelEnvButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("cancelEnvButtonLight").isVisible = false });
-
 
     let applyEnvButton = advancedTexture.getControlByName("applyEnvButton");
     let applyEnvButtonLight = advancedTexture.getControlByName("applyEnvButtonLight");
 
     applyEnvButton.onPointerUpObservable.add(function () {
-        
-        //Set this selection as the environment map background         
+        // Change the environment map                 
         setEnvMap(
-        selectedEnvSrc,
-        skyMat,
-        true,
+        selectedEnvSrc,       
         false,
-        skySphere
+        false,
+        skySphere,
+        enableFX,
+        blurAmount,
+        brightAmount
     );
 
         if (!envWindow.isVisible) {
@@ -1157,6 +1221,7 @@
     GridSizeSlider.minimum = 0;
     GridSizeSlider.maximum = 50;
     GridSizeSlider.value = 10;
+    
     GridSizeSlider.onValueChangedObservable.add(function(value) {
         GridSizeOutputLabel.text = Math.round(value);        
         ground.scaling.x = Math.round(value);
