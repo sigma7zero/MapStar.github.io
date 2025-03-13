@@ -143,25 +143,26 @@
     // Default intensity is 1. Let's dim the light a small amount
     light.intensity = 0.6;
     light.diffuse = new BABYLON.Color3(0.83, 0.94, 1);
-
+    
     // Our built-in 'sphere' shape.
     let sphere = BABYLON.MeshBuilder.CreateSphere("sphere", { diameter: 2, segments: 32 }, scene);
+    
 
     // Move the sphere upward 1/2 its height
     sphere.position.y = 1; 
-    sphere.parent = collection;
-
-    // Add plane
-    let plane = BABYLON.MeshBuilder.CreatePlane("plane", { height: 5, width: 5}, scene);
-    plane.rotation.x = BABYLON.Tools.ToRadians(90);
-    plane.position.y = 0.1;
-    plane.backFaceCulling = false;
-    plane.parent = collection;
-    
+    sphere.parent = collection;   
+   
     // Shadows
     var shadowGenerator = new BABYLON.ShadowGenerator(1024, light);
     shadowGenerator.addShadowCaster(sphere);
     shadowGenerator.usePoissonSampling = true;
+    
+    // Add plane
+    let plane = BABYLON.MeshBuilder.CreatePlane("plane", { height: 5, width: 5}, scene);    
+    plane.rotation.x = BABYLON.Tools.ToRadians(90);
+    plane.position.y = 0.1;    
+    plane.parent = collection;
+    plane.receiveShadows = true;    
 
     // add a snappable grid system here -------------------
     let grid = new BABYLON.GridMaterial("grid", scene);
@@ -176,12 +177,14 @@
         updatable: true
     }
     , scene, true);
-
     ground.material = grid; 
     ground.parent = collection;
 
-    plane.receiveShadows = true;
-     
+    // Load the standard (default) node material 
+    
+
+
+
 
     // LOADER
     engine.displayLoadingUI();
@@ -829,19 +832,39 @@
     applyEnvButton.onPointerOutObservable.add(function () {applyEnvButtonLight.isVisible = false;});         
        
     //-------------------------------------------------------------------------------------------------
+    // Material Editor         
+    
+   
 
-    let cameraEnvButton = advancedTexture.getControlByName("cameraEnvButton");
-    let cameraEnvButtonLight = advancedTexture.getControlByName("cameraEnvButtonLight");
+    let materialsEditButton = advancedTexture.getControlByName("MaterialsEditButton");
+    let materialsEditButtonLight = advancedTexture.getControlByName("materialsEditButtonLight");
     
-    cameraEnvButton.onPointerUpObservable.add(function () { alert("cameraEnvButton Pressed!...."); });
+    materialsEditButton.onPointerUpObservable.add(function () { 
+        
+        
+
+    });
     
-    cameraEnvButton.onPointerEnterObservable.add(function () {       
-            cameraEnvButtonLight.isVisible = true;        
+    materialsEditButton.onPointerEnterObservable.add(function () {       
+            materialsEditButtonLight.isVisible = true;        
     });
 
-    cameraEnvButton.onPointerOutObservable.add(function () {       
-            cameraEnvButtonLight.isVisible = false;        
+    materialsEditButton.onPointerOutObservable.add(function () {       
+            materialsEditButtonLight.isVisible = false;        
     });
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     let lightingEnvButton = advancedTexture.getControlByName("lightingEnvButton");
     let lightingEnvButtonLight = advancedTexture.getControlByName("lightingEnvButtonLight");
@@ -907,7 +930,10 @@
     sm_cameraButton.onPointerOutObservable.add(function () {
         sm_cameraButtonLight.isVisible = false;
     });
+      
+
     
+
     // Toggle Inspector Panel
     let smInspectorButton = advancedTexture.getControlByName("smInspectorButton");
     let inspectorPanelToggle = false;
@@ -916,6 +942,9 @@
         if (!inspectorPanelToggle) {
             advancedTexture.getControlByName("smInspectorButtonLight").isVisible = true;
             scene.debugLayer.show({embedMode: true});
+
+            //openMaterialEditor(default material);
+
             inspectorPanelToggle = true;
         }
         else{
