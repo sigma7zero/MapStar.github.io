@@ -141,22 +141,37 @@
     light.parent = collection;
 
     // Default intensity is 1. Let's dim the light a small amount
-    light.intensity = 0.6;
+    light.intensity = 1.0;
     light.diffuse = new BABYLON.Color3(0.83, 0.94, 1);
     
-    // Our built-in 'sphere' shape.
-    let sphere = BABYLON.MeshBuilder.CreateSphere("sphere", { diameter: 2, segments: 32 }, scene);
+    // Load standard assetts ---------------------------------------------------------------------
     
+    //Load material from snippet
+    var smGold = await BABYLON.NodeMaterial.ParseFromSnippetAsync("#GPT903", scene);
+    smGold.name = "smGold"; 
+    var toggleMaterialsEditor = false;    
+    // Load a shader ball.
+    let shaderBall = await BABYLON.SceneLoader.ImportMeshAsync("", 
+        "https://raw.githubusercontent.com/BabylonJS/MeshesLibrary/master/", 
+        "shaderBall.glb", 
+        scene);
+    shaderBall = scene.getMeshByName("simpleShaderBall");
+    shaderBall.name = "shaderBall";
+    shaderBall.position.x = 0;
+    shaderBall.position.y = 1; 
+    shaderBall.parent = collection; 
+    shaderBall.material = smGold;
 
-    // Move the sphere upward 1/2 its height
-    sphere.position.y = 1; 
-    sphere.parent = collection;   
    
     // Shadows
     var shadowGenerator = new BABYLON.ShadowGenerator(1024, light);
-    shadowGenerator.addShadowCaster(sphere);
+    shadowGenerator.addShadowCaster(shaderBall);
+    shadowGenerator.enableSoftTransparentShadow = true;
     shadowGenerator.usePoissonSampling = true;
-    
+    shadowGenerator.transparencyShadow = true;
+    shadowGenerator.darkness = 0.5;
+
+
     // Add plane
     let plane = BABYLON.MeshBuilder.CreatePlane("plane", { height: 5, width: 5}, scene);    
     plane.rotation.x = BABYLON.Tools.ToRadians(90);
@@ -180,11 +195,7 @@
     ground.material = grid; 
     ground.parent = collection;
 
-    // Load the standard (default) node material 
     
-
-
-
 
     // LOADER
     engine.displayLoadingUI();
@@ -195,7 +206,6 @@
     
     let checkedFX = advancedTexture.getControlByName("EnableFX");
     checkedFX.isChecked = false;
-
 
     // HELPERS      
     // Download the scene to the client's machine (Note: Web Safe)
@@ -275,7 +285,12 @@
         instrumentation.capturePhysicsTime = true;
         instrumentation.captureAnimationsTime = true;
     }
-    
+       
+    $(window).bind("beforeunload", function() {        
+        return "Do you really want to leave?";
+    });
+
+
     // Environment Window - map selection system ------------------------------------------------------------------
     let selectColor = "rgba(0, 255, 13, 255)";
     let envWindow = advancedTexture.getControlByName("envWindow");    
@@ -834,14 +849,21 @@
     //-------------------------------------------------------------------------------------------------
     // Material Editor         
     
-   
-
     let materialsEditButton = advancedTexture.getControlByName("MaterialsEditButton");
     let materialsEditButtonLight = advancedTexture.getControlByName("materialsEditButtonLight");
     
     materialsEditButton.onPointerUpObservable.add(function () { 
         
-        
+        if (!toggleMaterialsEditor){
+            toggleMaterialsEditor = true;
+            materialsEditButtonLight.isVisible = true;
+            if(smGold){
+                smGold.edit();                
+            }
+        }else{
+            toggleMaterialsEditor = false;
+            materialsEditButtonLight.isVisible = false;           
+        }      
 
     });
     
@@ -850,7 +872,11 @@
     });
 
     materialsEditButton.onPointerOutObservable.add(function () {       
+        
+        if (!toggleMaterialsEditor){
             materialsEditButtonLight.isVisible = false;        
+        }        
+               
     });
 
 
@@ -942,9 +968,6 @@
         if (!inspectorPanelToggle) {
             advancedTexture.getControlByName("smInspectorButtonLight").isVisible = true;
             scene.debugLayer.show({embedMode: true});
-
-            //openMaterialEditor(default material);
-
             inspectorPanelToggle = true;
         }
         else{
@@ -1431,6 +1454,8 @@
         textblockMeshes.text = scene.getActiveMeshes().length;
     });
     
+    
+
     //Hide Loader
     engine.hideLoadingUI();
     
