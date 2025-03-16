@@ -860,23 +860,21 @@
 
     materialsEditButton.onPointerUpObservable.add(function () { 
         
-        if (!toggleMaterialsEditor){
-            
+        if (!toggleMaterialsEditor){           
             // Open the material editor window
-            materialsEditWindow = window.open("https://nme.babylonjs.com/#9MGHK2", "_blank", "toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes");
-            materialsEditWindow.focus();
+            smGold.edit();            
             toggleMaterialsEditor = true;
-            materialsEditButtonLight.isVisible = true;           
+            materialsEditButtonLight.isVisible = true; 
+                      
         }else
         {                     
             // Close the material editor window
-            materialsEditWindow.close();
+            NODEEDITOR.NodeEditor._PopupWindow.close();                        
             toggleMaterialsEditor = false;
-            materialsEditButtonLight.isVisible = false;
+            materialsEditButtonLight.isVisible = false;            
                        
         }   
-    });
-    
+    });    
 
     materialsEditButton.onPointerEnterObservable.add(function () {       
             materialsEditButtonLight.isVisible = true;        
