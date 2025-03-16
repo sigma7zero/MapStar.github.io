@@ -61,8 +61,8 @@
                             }
                         });
                     }
+        
 
-            
     var engine = null;
     var scene = null;    
     var sceneToRender = null;
@@ -149,7 +149,9 @@
     //Load material from snippet
     var smGold = await BABYLON.NodeMaterial.ParseFromSnippetAsync("#GPT903", scene);
     smGold.name = "smGold"; 
-    var toggleMaterialsEditor = false;    
+    
+        
+    
     // Load a shader ball.
     let shaderBall = await BABYLON.SceneLoader.ImportMeshAsync("", 
         "https://raw.githubusercontent.com/BabylonJS/MeshesLibrary/master/", 
@@ -179,6 +181,7 @@
     plane.parent = collection;
     plane.receiveShadows = true;    
 
+
     // add a snappable grid system here -------------------
     let grid = new BABYLON.GridMaterial("grid", scene);
     grid.gridRatio = 0.1;
@@ -196,7 +199,6 @@
     ground.parent = collection;
 
     
-
     // LOADER
     engine.displayLoadingUI();
 
@@ -290,6 +292,8 @@
         return "Do you really want to leave?";
     });
 
+   
+    
 
     // Environment Window - map selection system ------------------------------------------------------------------
     let selectColor = "rgba(0, 255, 13, 255)";
@@ -848,25 +852,32 @@
        
     //-------------------------------------------------------------------------------------------------
     // Material Editor         
-    
+    var toggleMaterialsEditor = false;
+
     let materialsEditButton = advancedTexture.getControlByName("MaterialsEditButton");
-    let materialsEditButtonLight = advancedTexture.getControlByName("materialsEditButtonLight");
-    
+    let materialsEditButtonLight = advancedTexture.getControlByName("materialsEditButtonLight");    
+    let materialsEditWindow = null;
+
     materialsEditButton.onPointerUpObservable.add(function () { 
         
         if (!toggleMaterialsEditor){
+            
+            // Open the material editor window
+            materialsEditWindow = window.open("https://nme.babylonjs.com/#9MGHK2", "_blank", "toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes");
+            materialsEditWindow.focus();
             toggleMaterialsEditor = true;
-            materialsEditButtonLight.isVisible = true;
-            if(smGold){
-                smGold.edit();                
-            }
-        }else{
+            materialsEditButtonLight.isVisible = true;           
+        }else
+        {                     
+            // Close the material editor window
+            materialsEditWindow.close();
             toggleMaterialsEditor = false;
-            materialsEditButtonLight.isVisible = false;           
-        }      
-
+            materialsEditButtonLight.isVisible = false;
+                       
+        }   
     });
     
+
     materialsEditButton.onPointerEnterObservable.add(function () {       
             materialsEditButtonLight.isVisible = true;        
     });
@@ -879,18 +890,7 @@
                
     });
 
-
-
-
-
-
-
-
-
-
-
-
-
+    // LIGHTS --------------------------------------------------------------------------------------------
 
     let lightingEnvButton = advancedTexture.getControlByName("lightingEnvButton");
     let lightingEnvButtonLight = advancedTexture.getControlByName("lightingEnvButtonLight");
