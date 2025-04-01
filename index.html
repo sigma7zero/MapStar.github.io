@@ -202,6 +202,10 @@
     // LOADER
     engine.displayLoadingUI();
 
+    // VERSION
+    const engineVersion = BABYLON.Engine.Version;
+    console.log("ENGINE VERSION: " + engineVersion);
+
     // GUI
     let advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("GUI", true, scene);              
     let loadedGUI = await advancedTexture.parseFromURLAsync("https://raw.githubusercontent.com/sigma7zero/MapStar.github.io/main/guiTexture.json");
@@ -500,6 +504,19 @@
         console.log("TAB SELECT: " + tab_selected);
     });
 
+
+    function launchMaterials(){
+        resetMarkerDots();
+        resetMarkerLines();
+        resetAssetViewer()
+        tab_selected = "Materials";
+	    selectMarkerDotMaterials.isVisible = true;
+        selectMaterialMarkerLine.isVisible = true;
+        materialAssetsViewer.isVisible = true;
+        console.log("TAB SELECT: " + tab_selected);  
+    };
+        
+    
     tab_MaterialsButton.onPointerUpObservable.add(function () {
 
         resetMarkerDots();
@@ -857,21 +874,33 @@
     let materialsEditButton = advancedTexture.getControlByName("MaterialsEditButton");
     let materialsEditButtonLight = advancedTexture.getControlByName("materialsEditButtonLight");    
     let materialsEditWindow = null;
+         
+      
+
+    
+
 
     materialsEditButton.onPointerUpObservable.add(function () { 
         
         if (!toggleMaterialsEditor){           
             // Open the material editor window
-            smGold.edit();            
+            materialsEditWindow = smGold.edit(); 
+            scene.debugLayer.select(smGold);           
             toggleMaterialsEditor = true;
-            materialsEditButtonLight.isVisible = true; 
-                      
+            materialsEditButtonLight.isVisible = true;             
+            console.log("materialsEditWindow : " + materialsEditWindow); 
+            if (tab_selected != "Materials") {
+                launchMaterials();
+            }
+
         }else
         {                     
             // Close the material editor window
+
             NODEEDITOR.NodeEditor._PopupWindow.close();                        
             toggleMaterialsEditor = false;
-            materialsEditButtonLight.isVisible = false;            
+            materialsEditButtonLight.isVisible = false;
+                       
                        
         }   
     });    
@@ -1379,12 +1408,20 @@
 
     let illuminateAboutButton = advancedTexture.getControlByName("illuminateAboutButton");
     
+    let aboutWinVersionInfo = advancedTexture.getControlByName("AboutWinVersionInfo");
+    
     illuminateAboutButton.isVisible = aboutWindow.isVisible;
 
     aboutButton.onPointerUpObservable.add(function () {
         if (!aboutWindow.isVisible) {
+            // Hide gizmos
+            positionGizmo.attachedMesh = null;
+            scene.debugLayer.hide();
+            
             aboutWindow.isVisible = true;
             illuminateAboutButton.isVisible = true;
+            aboutWinVersionInfo.text = "Microsoft Babylonjs API : Version " + engineVersion;
+
         }
         else {
             aboutWindow.isVisible = false;
@@ -1416,25 +1453,46 @@
         }
     });
 
-    aboutWinOKButton.onPointerEnterObservable.add(function () {
-        //if (!aboutWindow.isVisible) {
-            aboutWinOKButtonLight.isVisible = true;
-        //}
+    aboutWinOKButton.onPointerEnterObservable.add(function () {        
+            aboutWinOKButtonLight.isVisible = true;        
     });
 
-    aboutWinOKButton.onPointerOutObservable.add(function () {
-        //if (!aboutWindow.isVisible) {
-            aboutWinOKButtonLight.isVisible = false;            
-        //}
+    aboutWinOKButton.onPointerOutObservable.add(function () {        
+            aboutWinOKButtonLight.isVisible = false;        
     });
+
+    let popupReminderWindow = advancedTexture.getControlByName("popupReminderWindow");
+    
+    let popupOKButton = advancedTexture.getControlByName("popupOKButton");
+
+    let popupOKButtonLight = advancedTexture.getControlByName("popupOKButtonLight");
+
+    popupReminderWindow.isVisible = true;
+
+    aboutWinVersionInfo.text = "Microsoft Babylonjs API : Version " + engineVersion;
+    
+    popupOKButton.onPointerUpObservable.add(function () {       
+        popupReminderWindow.isVisible = false;            
+    });
+
+    popupOKButton.onPointerEnterObservable.add(function () {        
+        popupOKButtonLight.isVisible = true;        
+    });
+
+    popupOKButton.onPointerOutObservable.add(function () {        
+        popupOKButtonLight.isVisible = false;        
+    });
+
+
+
+
+
+
 
     let donateButton = advancedTexture.getControlByName("ButtonDonate");
     donateButton.onPointerUpObservable.add(function () { alert("ButtonDonate Pressed!...."); });
     donateButton.onPointerEnterObservable.add(function () { advancedTexture.getControlByName("illuminateDonateButton").isVisible = true });
     donateButton.onPointerOutObservable.add(function () { advancedTexture.getControlByName("illuminateDonateButton").isVisible = false });
-
-
-    
 
 
     // Get FPS and other stats
@@ -1453,7 +1511,6 @@
     });
     
     
-
     //Hide Loader
     engine.hideLoadingUI();
     
